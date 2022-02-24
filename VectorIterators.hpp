@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 12:37:52 by jandre            #+#    #+#             */
-/*   Updated: 2022/02/24 13:33:05 by jandre           ###   ########.fr       */
+/*   Updated: 2022/02/24 14:20:52 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ namespace ft
             {
                 *this = other;
                 return ;
-            }
+            };
             VectorIterator(pointer ptr) : _ptr(ptr)
             {
                 return ;
@@ -54,19 +54,19 @@ namespace ft
                 if (*this != other)
                     this->_ptr = other._ptr;
                 return (*this);
-            }
+            };
 
         //increment & decrement before and after the it
             VectorIterator &operator++(void)
             {
                 this->_ptr++;
                 return ;
-            }
+            };
             VectorIterator &operator--(void)
             {
                 this->_ptr--;
                 return ;
-            }
+            };
             VectorIterator operator++(int)
 			{
 				VectorIterator tmp(*this);
@@ -162,7 +162,7 @@ namespace ft
             value_type &operator[](int n) const
 			{
 				return (*(*this + n));
-			}
+			};
     };
 
     template <class T>
@@ -183,7 +183,7 @@ namespace ft
             {
                 *this = other;
                 return ;
-            }
+            };
             ReverseVectorIterator(pointer ptr) : _ptr(ptr)
             {
                 return ;
@@ -199,19 +199,19 @@ namespace ft
                 if (*this != other)
                     this->_ptr = other._ptr;
                 return (*this);
-            }
+            };
 
         //increment & decrement before and after the it
             ReverseVectorIterator &operator++(void)
             {
                 this->_ptr++;
                 return ;
-            }
+            };
             ReverseVectorIterator &operator--(void)
             {
                 this->_ptr--;
                 return ;
-            }
+            };
             ReverseVectorIterator operator++(int)
 			{
 				ReverseVectorIterator tmp(*this);
@@ -350,12 +350,12 @@ namespace ft
 			const value_type *operator->(void)
 			{
 				return (this->_ptr);
-			}
+			};
 		//brackets
 			const value_type &operator[](int n) const
 			{
 				return (*(*this + n));
-			}
+			};
 	};
 
 	template <class T>
@@ -397,12 +397,12 @@ namespace ft
 			const value_type *operator->(void)
 			{
 				return (this->_ptr);
-			}
+			};
 		//brackets
 			const value_type &operator[](int n) const
 			{
 				return (*(*this + n));
-			}
+			};
 	};
 };
 
