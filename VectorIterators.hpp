@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 12:37:52 by jandre            #+#    #+#             */
-/*   Updated: 2022/02/24 13:16:15 by jandre           ###   ########.fr       */
+/*   Updated: 2022/02/24 13:33:05 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 namespace ft
 {
-
     template <class T>
     class VectorIterator
     {
@@ -174,8 +173,7 @@ namespace ft
             typedef T value_type;
             typedef T& reference;
 			typedef T* pointer;
-        
-        public:
+
         //Constructors && destructors
             ReverseVectorIterator(void)
             {
@@ -311,6 +309,101 @@ namespace ft
 				return (*(*this - n));
 			}
     };
+
+	template <class T>
+	class ConstVectorIterator : public VectorIterator<T>
+	{
+		public:
+			typedef T value_type;
+			typedef T& reference;
+			typedef T* pointer;
+		
+		//Constructor & destructors
+			ConstVectorIterator(void)
+			{
+				return ;
+			};
+			ConstVectorIterator(pointer ptr)
+			{
+				this->_ptr = ptr;
+			};
+			ConstVectorIterator(const ConstVectorIterator &other)
+			{
+				*this = other;
+			};
+			~ConstVectorIterator(void)
+			{
+				return ;
+			};
+
+		//Operator overloads
+			ConstVectorIterator &operator=(const ConstVectorIterator &other)
+			{
+				this->_ptr = other._ptr;
+				return (*this);
+			};
+		//reference dereference
+			const value_type &operator*(void)
+			{
+				return (*this->_ptr);
+			};
+			const value_type *operator->(void)
+			{
+				return (this->_ptr);
+			}
+		//brackets
+			const value_type &operator[](int n) const
+			{
+				return (*(*this + n));
+			}
+	};
+
+	template <class T>
+	class ConstReverseVectorIterator : public ReverseVectorIterator<T>
+	{
+		public:
+			typedef T value_type;
+			typedef T& reference;
+			typedef T* pointer;
+					
+		//Constructor & destructors
+			ConstReverseVectorIterator(void)
+			{
+				return ;
+			};
+			ConstReverseVectorIterator(pointer ptr)
+			{
+				this->_ptr = ptr;
+			};
+			ConstReverseVectorIterator(const ConstReverseVectorIterator &other)
+			{
+				*this = other;
+			};
+			~ConstReverseVectorIterator(void)
+			{
+				return ;
+			};
+		//Operator overloads
+			ConstReverseVectorIterator &operator=(const ConstReverseVectorIterator &other)
+			{
+				this->_ptr = other._ptr;
+				return (*this);
+			};
+		//reference dereference
+			const value_type &operator*(void)
+			{
+				return (*this->_ptr);
+			};
+			const value_type *operator->(void)
+			{
+				return (this->_ptr);
+			}
+		//brackets
+			const value_type &operator[](int n) const
+			{
+				return (*(*this + n));
+			}
+	};
 };
 
 #endif
