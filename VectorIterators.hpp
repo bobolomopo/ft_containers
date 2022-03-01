@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   VectorIterators.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 12:37:52 by jandre            #+#    #+#             */
-/*   Updated: 2022/02/24 14:20:52 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/01 18:53:44 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ namespace ft
             VectorIterator &operator++(void)
             {
                 this->_ptr++;
-                return ;
+                return (*this);
             };
             VectorIterator &operator--(void)
             {
                 this->_ptr--;
-                return ;
+                return (*this);
             };
             VectorIterator operator++(int)
 			{
@@ -184,8 +184,9 @@ namespace ft
                 *this = other;
                 return ;
             };
-            ReverseVectorIterator(pointer ptr) : _ptr(ptr)
+            ReverseVectorIterator(pointer ptr)
             {
+				this->_ptr = ptr;
                 return ;
             };
             ~ReverseVectorIterator(void)
@@ -205,12 +206,12 @@ namespace ft
             ReverseVectorIterator &operator++(void)
             {
                 this->_ptr++;
-                return ;
+                return (*this);
             };
             ReverseVectorIterator &operator--(void)
             {
                 this->_ptr--;
-                return ;
+                return (*this);
             };
             ReverseVectorIterator operator++(int)
 			{
@@ -228,27 +229,27 @@ namespace ft
         //boolean operators
             bool operator==(const ReverseVectorIterator &other) const
 			{
-				return (_ptr == other._ptr);
+				return (this->_ptr == other._ptr);
 			};
 			bool operator!=(const ReverseVectorIterator &other) const
 			{
-				return (_ptr != other._ptr);
+				return (this->_ptr != other._ptr);
 			};
 			bool operator>(const ReverseVectorIterator &other) const
 			{
-				return (_ptr > other._ptr);
+				return (this->_ptr > other._ptr);
 			};
 			bool operator>=(const ReverseVectorIterator &other) const
 			{
-				return (_ptr >= other._ptr);
+				return (this->_ptr >= other._ptr);
 			};
 			bool operator<(const ReverseVectorIterator &other) const
 			{
-				return (_ptr < other._ptr);
+				return (this->_ptr < other._ptr);
 			};
 			bool operator<=(const ReverseVectorIterator &other) const
 			{
-				return (_ptr <= other._ptr);
+				return (this->_ptr <= other._ptr);
 			};
 
         //reference and dereference

@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 13:47:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/01 18:40:21 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/01 19:03:29 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "VectorIterators.hpp"
 # include <memory>
 # include <stdexcept>
+# include <limits>
 
 
 namespace ft
@@ -52,9 +53,9 @@ namespace ft
                 return ;
             };
         // fill constructor : Constructs a container with n elements. Each element is a copy of val.
-            explicit vector (size_type n, const value_type& val = value_type(),
-                 const allocator_type& alloc = allocator_type()) :
-                 _length(0),  _size(0), container(NULL), _allocator(allocator)
+            explicit Vector (size_type n, const value_type& value = value_type(),
+                 const allocator_type& allocator = allocator_type()) :
+                 _length(0), _size(0), _container(NULL), _allocator(allocator)
             {
                 this->_container = this->_allocator.allocate(0);
                 this->assign(n, value);
@@ -65,7 +66,7 @@ namespace ft
         // with each element constructed from its corresponding element in that range, in the same order.
             template <class InputIterator>
 			Vector(InputIterator begin, InputIterator end, const allocator_type &allocator = allocator_type())
-			: _length(0), r_size(0), _container(NULL), _allocator(allocator)
+			: _length(0), _size(0), _container(NULL), _allocator(allocator)
 			{
 				this->_container = this->_allocator.allocate(0);
 				this->assign(begin, end);
@@ -201,14 +202,14 @@ namespace ft
         // Returns a reference to the element at position n in the vector. throws out_of_range exeption if out of range
             reference at(size_type n)
 			{
-				if (n >= _container_length || n < 0)
+				if (n >= this->_length || n < 0)
 					throw (std::out_of_range());
 				return (this->_container[n]);
 			};
         // Returns a constant reference to the element at position n in the vector. throws out_of_range exeption if out of range
 			const_reference at(size_type n) const
 			{
-				if (n >= _container_length || n < 0)
+				if (n >= this->_length || n < 0)
 					throw (std::out_of_range());
 				return (this->_container[n]);
 			};
@@ -320,9 +321,9 @@ namespace ft
 				return (iterator(begin));
 			};
         // Exchanges the content of the container by the content of x, which is another vector object of the same type. Sizes may differ.
-            void swap (vector& x)
+            void swap (Vector& x)
             {
-                vector<value_type> tmp(this);
+                Vector<value_type> tmp(this);
 
                 this = x;
                 x = tmp;
@@ -395,7 +396,7 @@ namespace ft
 	}
 // Non member fonction swap
     template <class T, class Alloc>
-    void swap (vector<T,Alloc>& x, vector<T,Alloc>& y)
+    void swap (Vector<T, Alloc>& x, Vector<T, Alloc>& y)
     {
         x.swap(y);
     };
