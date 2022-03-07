@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 13:47:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/02 17:46:32 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/07 19:27:59 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ namespace ft
             void reserve(size_type n)
 			{
                 if (n > this->max_size())
-                    throw(std::length_error());
+                    throw(std::length_error("Length_error"));
 				if (n > this->_size)
 				{
 					size_type i = -1;
@@ -202,14 +202,14 @@ namespace ft
             reference at(size_type n)
 			{
 				if (n >= this->_length || n < 0)
-					throw (std::out_of_range());
+					throw (std::out_of_range("Out of Range error"));
 				return (this->_container[n]);
 			};
         // Returns a constant reference to the element at position n in the vector. throws out_of_range exeption if out of range
 			const_reference at(size_type n) const
 			{
 				if (n >= this->_length || n < 0)
-					throw (std::out_of_range());
+					throw (std::out_of_range("Out of Range error"));
 				return (this->_container[n]);
 			};
         // Returns a reference to the first element in the vector.

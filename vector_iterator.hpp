@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 12:37:52 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/02 17:46:43 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/07 17:43:39 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,27 +175,27 @@ namespace ft
 			typedef T* pointer;
 
         //Constructors && destructors
-            vector_iterator(void)
+            reverse_vector_iterator(void)
             {
                 return ;
             };
-            vector_iterator(const vector_iterator &other)
+            reverse_vector_iterator(const reverse_vector_iterator &other)
             {
                 *this = other;
                 return ;
             };
-            vector_iterator(pointer ptr)
+            reverse_vector_iterator(pointer ptr)
             {
 				this->_ptr = ptr;
                 return ;
             };
-            ~vector_iterator(void)
+            ~reverse_vector_iterator(void)
 			{
                 return ;
             };
 
         //Operator overloads
-            vector_iterator &operator=(const vector_iterator &other)
+            reverse_vector_iterator &operator=(const reverse_vector_iterator &other)
             {
                 if (*this != other)
                     this->_ptr = other._ptr;
@@ -203,51 +203,51 @@ namespace ft
             };
 
         //increment & decrement before and after the it
-            vector_iterator &operator++(void)
+            reverse_vector_iterator &operator++(void)
             {
                 this->_ptr++;
                 return (*this);
             };
-            vector_iterator &operator--(void)
+            reverse_vector_iterator &operator--(void)
             {
                 this->_ptr--;
                 return (*this);
             };
-            vector_iterator operator++(int)
+            reverse_vector_iterator operator++(int)
 			{
-				vector_iterator tmp(*this);
+				reverse_vector_iterator tmp(*this);
 				operator++();
 				return (tmp);
 			};
-			vector_iterator operator--(int)
+			reverse_vector_iterator operator--(int)
 			{
-				vector_iterator tmp(*this);
+				reverse_vector_iterator tmp(*this);
 				operator--();
 				return (tmp);
 			};
 
         //boolean operators
-            bool operator==(const vector_iterator &other) const
+            bool operator==(const reverse_vector_iterator &other) const
 			{
 				return (this->_ptr == other._ptr);
 			};
-			bool operator!=(const vector_iterator &other) const
+			bool operator!=(const reverse_vector_iterator &other) const
 			{
 				return (this->_ptr != other._ptr);
 			};
-			bool operator>(const vector_iterator &other) const
+			bool operator>(const reverse_vector_iterator &other) const
 			{
 				return (this->_ptr > other._ptr);
 			};
-			bool operator>=(const vector_iterator &other) const
+			bool operator>=(const reverse_vector_iterator &other) const
 			{
 				return (this->_ptr >= other._ptr);
 			};
-			bool operator<(const vector_iterator &other) const
+			bool operator<(const reverse_vector_iterator &other) const
 			{
 				return (this->_ptr < other._ptr);
 			};
-			bool operator<=(const vector_iterator &other) const
+			bool operator<=(const reverse_vector_iterator &other) const
 			{
 				return (this->_ptr <= other._ptr);
 			};
@@ -263,19 +263,19 @@ namespace ft
 			};
 
         //Basic arithmetic operations
-            vector_iterator operator+(int n) const
+            reverse_vector_iterator operator+(int n) const
 			{
-				vector_iterator tmp(*this);
+				reverse_vector_iterator tmp(*this);
 				tmp += n;
 				return (tmp);
 			};
-			vector_iterator operator-(int n) const
+			reverse_vector_iterator operator-(int n) const
 			{
-				vector_iterator tmp(*this);
+				reverse_vector_iterator tmp(*this);
 				tmp -= n;
 				return (tmp);
 			};
-			vector_iterator &operator+=(int n)
+			reverse_vector_iterator &operator+=(int n)
 			{
 				while (n < 0)
 				{
@@ -289,7 +289,7 @@ namespace ft
 				}
 				return (*this);
 			};
-			vector_iterator &operator-=(int n)
+			reverse_vector_iterator &operator-=(int n)
 			{
 				while (n > 0)
 				{
@@ -320,25 +320,25 @@ namespace ft
 			typedef T* pointer;
 		
 		//Constructor & destructors
-			ConstVectorIterator(void)
+			const_vector_iterator(void)
 			{
 				return ;
 			};
-			ConstVectorIterator(pointer ptr)
+			const_vector_iterator(pointer ptr)
 			{
 				this->_ptr = ptr;
 			};
-			ConstVectorIterator(const ConstVectorIterator &other)
+			const_vector_iterator(const const_vector_iterator &other)
 			{
 				*this = other;
 			};
-			~ConstVectorIterator(void)
+			~const_vector_iterator(void)
 			{
 				return ;
 			};
 
 		//Operator overloads
-			ConstVectorIterator &operator=(const ConstVectorIterator &other)
+			const_vector_iterator &operator=(const const_vector_iterator &other)
 			{
 				this->_ptr = other._ptr;
 				return (*this);
