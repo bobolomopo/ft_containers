@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 16:28:31 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/21 20:24:58 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/21 22:39:45 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,20 @@ namespace ft {
             typedef T*                              pointer;
             typedef T&                              reference;
             typedef ft::random_access_iterator_tag  iterator_category;
+    };
+
+    //This is a base class template that can be used to derive iterator
+    //classes from it. It is not an iterator class and does not provide any of the 
+    //functionality an iterator is expected to have.
+    template <class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&> 
+    class iterator
+    {
+        public:
+            typedef T         value_type;
+            typedef Distance  difference_type;
+            typedef Pointer   pointer;
+            typedef Reference reference;
+            typedef Category  iterator_category;
     };
 }
 
