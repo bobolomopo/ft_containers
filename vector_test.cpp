@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 17:25:36 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/07 18:38:07 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/08 16:00:35 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int main()
     std::cout << "=====================================================" << std::endl  << std::endl;
 
     ft::vector<int> vec_int; 
-    ft::vector<int> vec_base_val(10, 465); 
+    ft::vector<int> vec_base_val(10, 10); 
     ft::vector<int> vec_cpy(vec_base_val); 
     ft::vector<int> vec_int2(vec_base_val.begin(), vec_base_val.begin() + 3); 
     

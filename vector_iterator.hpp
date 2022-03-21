@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 12:37:52 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/07 17:43:39 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/21 18:31:28 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,11 @@ namespace ft
 			};
     
         //reference and dereference
-            value_type &operator*(void)
+            reference operator*(void) const
 			{
 				return (*this->_ptr);
 			};
-			value_type *operator->(void)
+			pointer operator->(void)
 			{
 				return (this->_ptr);
 			};
@@ -253,11 +253,11 @@ namespace ft
 			};
 
         //reference and dereference
-            value_type &operator*(void)
+            reference operator*(void) const
 			{
-				return (*this->_ptr);
+				return (this->_ptr);
 			};
-			value_type *operator->(void)
+			pointer operator->(void)
 			{
 				return (this->_ptr);
 			};
@@ -344,11 +344,11 @@ namespace ft
 				return (*this);
 			};
 		//reference dereference
-			const value_type &operator*(void)
+			reference operator*(void) const
 			{
 				return (*this->_ptr);
 			};
-			const value_type *operator->(void)
+			pointer operator->(void)
 			{
 				return (this->_ptr);
 			};
@@ -391,11 +391,11 @@ namespace ft
 				return (*this);
 			};
 		//reference dereference
-			const value_type &operator*(void)
+			reference operator*(void) const
 			{
 				return (*this->_ptr);
 			};
-			const value_type *operator->(void)
+			pointer operator->(void)
 			{
 				return (this->_ptr);
 			};

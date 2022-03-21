@@ -1,0 +1,72 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   iterator_traits.hpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/21 16:28:31 by jandre            #+#    #+#             */
+/*   Updated: 2022/03/21 20:24:58 by jandre           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef ITERATOR_TRAITS_HPP
+# define ITERATOR_TRAITS_HPP
+# include <cstddef>
+
+namespace ft {
+    //prototypes of the two types of iterators needed for the category of the iterator traits of map and vector.
+    class bidirectional_iterator_tag {};
+    class random_access_iterator_tag {};
+    
+    //Identificator of iterator needed for the containers
+    template <bool is_valid, typename T>
+        struct valid_iterator_tag_base { typedef T type; const static bool value = is_valid; };
+    //Case if its not tagged set the bool to false
+    template <typename T>
+        struct is_iterator_tagged : public valid_iterator_tag_base<false, T> { };
+    //Check is_input_iterator_tagged from ft::random_access_iterator_tag
+    template <>
+        struct is_iterator_tagged<ft::random_access_iterator_tag>
+            : public valid_iterator_tag_base<true, ft::random_access_iterator_tag> { };
+    //Check is_input_iterator_tagged from ft::bidirectional_iterator_tag
+    template <>
+        struct is_iterator_tagged<ft::bidirectional_iterator_tag>
+            : public valid_iterator_tag_base<true, ft::bidirectional_iterator_tag> { };
+    
+    //Generic definition of iterator traits
+    template <class Iterator> class iterator_traits
+    {
+        public:
+        //All the typedef for iterator_traits
+            typedef typename Iterator::difference_type       difference_type;
+            typedef typename Iterator::value_type            value_type;
+            typedef typename Iterator::pointer               pointer;
+            typedef typename Iterator::reference             reference;
+            typedef typename Iterator::iterator_category     iterator_category;
+    };
+    template <class T> class iterator_traits<T*>
+    {
+        public:
+        //All typedef for T* specialization
+        //ptrdiff_t is a type for difference of adresses.
+            typedef ptrdiff_t                       difference_type;
+            typedef T                               value_type;
+            typedef T*                              pointer;
+            typedef T&                              reference;
+            typedef ft::random_access_iterator_tag  iterator_category;
+    };
+    template <class T> class iterator_traits<const T*>
+    {
+        public:
+        //All typedef for const T* specialization
+        //ptrdiff_t is a type for difference of adresses.
+            typedef ptrdiff_t                       difference_type;
+            typedef T                               value_type;
+            typedef T*                              pointer;
+            typedef T&                              reference;
+            typedef ft::random_access_iterator_tag  iterator_category;
+    };
+}
+
+#endif

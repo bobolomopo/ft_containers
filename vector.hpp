@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 13:47:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/07 19:27:59 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/08 16:55:51 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ namespace ft
 			: _length(0), _size(0), _container(NULL), _allocator(allocator)
 			{
 				this->_container = this->_allocator.allocate(0);
-				this->assign(begin, end);
+				this->assign<InputIterator>(begin, end);
                 return ;
 			};
         // copy constructor
@@ -288,12 +288,13 @@ namespace ft
 			};
         // Range version
 			template <class InputIterator>
-			void insert(iterator position, InputIterator begin, InputIterator end)
+			void insert(iterator position, InputIterator first, InputIterator last)
 			{
-				while (begin != end)
+				while (first > 0)
 				{
-					position = this->insert(position, *begin) + 1;
-					++begin;
+
+					position = this->insert(position, *last) + 1;
+					first--;
 				}
 			};
         // Removes from the vector either a single element (position) or a range of elements ([first,last)).

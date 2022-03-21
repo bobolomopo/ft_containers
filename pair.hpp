@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Pair.hpp                                           :+:      :+:    :+:   */
+/*   pair.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 16:03:02 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/02 17:34:08 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/21 16:25:33 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ namespace ft
     {
         return (!(lhs < rhs));
     }
-    template <class T1,class T2>
     //make pair template
+    template <class T1,class T2>
     pair<T1, T2> make_pair (T1 x, T2 y)
     {
         return (pair<T1, T2>(x, y));
