@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector_test_real.cpp                               :+:      :+:    :+:   */
+/*   vector_test_mine.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 17:25:36 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/23 16:16:21 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/23 16:16:09 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <vector>
+#include "vector.hpp"
 #include <iostream>
 
-static void print_vec_values(std::vector<int> vec)
+static void print_vec_values(ft::vector<int> vec)
 {
-    for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+    for (ft::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << " ";
     std::cout << std::endl;
 }
@@ -26,10 +26,10 @@ int main()
     std::cout << "|-------------VECTOR_TEST_CONSTRUCTOR---------------|" << std::endl;
     std::cout << "=====================================================" << std::endl  << std::endl;
 
-    std::vector<int> vec_int; 
-    std::vector<int> vec_base_val(10, 10); 
-    std::vector<int> vec_cpy(vec_base_val); 
-    std::vector<int> vec_int2(vec_base_val.begin(), vec_base_val.begin() + 3); 
+    ft::vector<int> vec_int; 
+    ft::vector<int> vec_base_val(10, 10); 
+    ft::vector<int> vec_cpy(vec_base_val); 
+    ft::vector<int> vec_int2(vec_base_val.begin(), vec_base_val.begin() + 3); 
     std::cout << "All good !!!" << std::endl << std::endl;
 
     std::cout << "=====================================================" << std::endl;
