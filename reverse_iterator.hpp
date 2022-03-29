@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 23:32:28 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/22 22:34:24 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/30 01:31:22 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ namespace ft {
     class reverse_iterator {
          public:
          //All typedef for the reverse iterator
-            typedef Iterator                                                    iterator_type;
+            typedef Iterator                                                     iterator_type;
             typedef typename ft::iterator_traits<Iterator>::iterator_category    iterator_category;
             typedef typename ft::iterator_traits<Iterator>::value_type           value_type;
             typedef typename ft::iterator_traits<Iterator>::difference_type      difference_type;
@@ -111,7 +111,7 @@ namespace ft {
             };
 
         private:
-            pointer     _ptr;
+            iterator_type     _ptr;
     };
 }
 
