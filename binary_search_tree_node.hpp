@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:59:06 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/29 17:21:58 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/29 23:09:57 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,11 @@
 # include <cstddef>
 
 namespace ft {
-    template <class T1, class T2>
+    template <class T>
     struct bst_node
     {
         public:
-            typedef ft::pair<T1, T2>        value_type;
-            typedef value_type*             pointer;
-            typedef value_type&             reference;
+            typedef T        value_type;
 
         public:
             bst_node        *_root;
@@ -57,6 +55,7 @@ namespace ft {
             bool operator<=(const bst_node &other) const { return (this->_data <= other._data); };
             bool operator<(const bst_node &other) const { return (this->_data < other._data); };
             bool operator>(const bst_node &other) const { return (this->_data > other._data); };
+            bst_node operator*(void) const { return (this->_data); };
 
             //member functions
             void add_node(bst_node *parent)
