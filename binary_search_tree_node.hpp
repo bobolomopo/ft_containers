@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:59:06 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/29 16:51:45 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/29 17:21:58 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define BINARY_SEARCH_TREE_NODE_HPP
 # include "pair.hpp"
 # include <cstddef>
-# include <iostream>
 
 namespace ft {
     template <class T1, class T2>
@@ -59,35 +58,24 @@ namespace ft {
             bool operator<(const bst_node &other) const { return (this->_data < other._data); };
             bool operator>(const bst_node &other) const { return (this->_data > other._data); };
 
-            //accessor and dereference
-            //reference operator*(void) const { return (*_data); };
-            //pointer operator->(void) { return (&this->_data); };
             //member functions
             void add_node(bst_node *parent)
             {
                 this->_parent = parent;
-                if (this->_parent > this)
+                if (*this->_parent > *this)
                 {
-                    std::cout << this->_data.first << " " << this->_parent->_data.first << std::endl;
-                    if (!this->_parent->_left)
-                        this->_parent->_left = this;
-                    else
-                    {
+                    if (this->_parent->_left)
                         this->add_node(this->_parent->_left);
-                        return ;
-                    }
+                    else
+                        this->_parent->_left = this;
                     return ;
                 }
-                else if (this->_parent < this)
+                else if (*this->_parent < *this)
                 {
-                std::cout << "ok" << std::endl;
-                    if (!this->_parent->_right)
-                        this->_parent->_right = this;
-                    else
-                    {
+                    if (this->_parent->_right)
                         this->add_node(this->_parent->_right);
-                        return ;
-                    }
+                    else
+                        this->_parent->_right = this;
                     return ;
                 }
                 return ;
