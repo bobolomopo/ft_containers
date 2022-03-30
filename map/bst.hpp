@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 22:33:19 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/31 01:04:52 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/31 01:09:29 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,15 +204,7 @@ namespace ft {
 					}
 					return;
 				}
-
 			};
-            void print_inorder();
-            void inorder(node*);
-            void print_preorder();
-            void preorder(node*);
-            void print_postorder();
-            void postorder(node*);
-            void remove(int);
     };
 }
 
