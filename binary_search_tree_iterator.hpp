@@ -33,7 +33,7 @@ namespace ft {
         public:
         //constructor and destructors
             bst_it(const Compare& comp = Compare()) : _node(NULL), _prev(NULL), _next(NULL), _comp(comp) {};
-            bst_it(bst_node<value_type> *node, const Compare& comp = Compare()) : _node(node), _prev(NULL), _next(NULL), _comp(comp)
+            bst_it(bst_node<value_type> *node, const Compare& comp = Compare()) : _node(node), _first(NULL), _last(NULL), _comp(comp)
             {
                 bst_node<value_type>  *tmp = _node->_root;
 
@@ -45,7 +45,7 @@ namespace ft {
                     tmp = tmp->_right;
                 _last = tmp;
             };
-            bst_it(bst_it copy) : _node(copy._node), _prev(copy._prev), _next(copy._next), _comp(copy._comp) {};
+            bst_it(bst_it copy) : _node(copy._node), _first(copy._first), _last(copy._last), _comp(copy._comp) {};
             virtual ~bst_it() {};
         //operator overloads    
             bst_it &operator=(bst_it &rhs)
@@ -53,8 +53,8 @@ namespace ft {
                 if (*this == rhs)
                     return (*this);
                 this->_node = rhs._node;
-                this->_prev = rhs._prev;
-                this->_next = rhs._next;
+                this->_first = rhs._first;
+                this->_last = rhs._last;
                 this->_comp = rhs._comp;
                 return (*this);
             };
@@ -68,7 +68,7 @@ namespace ft {
             {
                 bst_node<value_type> *tmp;
                 if (_node == _last)
-                    _node == NULL;
+                    _node++;
                 else if (_node->_right)
                 {
                     tmp = _node->_right;
@@ -93,9 +93,15 @@ namespace ft {
             };
             bst_it& operator--(void)
             {
-                bst_node<value_type> *tmp;
+                bst_node<value_type> *tmp = _node;
+                tmp--;
                 if (_node == _first)
                     return (*this);
+                else if (tmp == _last)
+                {
+                    _node = tmp;
+                    return (*this);
+                }
                 else if (_node->_left)
                 {
                     tmp = _node->_left;
