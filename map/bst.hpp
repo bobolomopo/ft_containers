@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 22:33:19 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/31 02:10:17 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/31 03:31:24 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define BST_HPP
 # include <memory>
 # include "node.hpp"
+# include "bst_it.hpp"
 # include <functional>
-# include <iostream>
 
 namespace ft {
 	template <class T, class Node = ft::node<T>,
@@ -27,6 +27,7 @@ namespace ft {
             typedef Node_Alloc  node_allocator_type;
             typedef Node        node_type;
 			typedef T			value_type;
+			typedef typename ft::bst_it<value_type>                iterator;
 
         private:
             node_type   		*_root;
@@ -35,9 +36,25 @@ namespace ft {
         public:
 		//Constructor && Destructor
             bst() : _root() {};
+			~bst()
+			{
+				iterator it(_root);
+				iterator tmp(it._first);
+				value_type tmp_data;
+				int i = 0;
+
+				while (i < 10 && tmp._node->_data.first != it._last->_data.first)
+				{
+					tmp_data = tmp._node->_data;
+					tmp++;
+					remove(tmp_data);
+					i++;
+				}
+				remove(tmp._node->_data);
+			}
             
 			bool empty() { return (_root == NULL); };
-            void insert(value_type new_value)
+            iterator insert(value_type new_value)
             {
                 node_type* t = _node_alloc.allocate(1);
                 node_type* parent;
@@ -59,7 +76,7 @@ namespace ft {
 					while (tmp)
 					{
 						parent = tmp;
-						if(t->_data.first > tmp->_data.first)
+						if (t->_data.first > tmp->_data.first)
 							tmp = tmp->_right;
 						else
 							tmp = tmp->_left;
@@ -75,6 +92,8 @@ namespace ft {
 						parent->_right = t;
 					}
 				}
+				iterator it(t);
+				return (it);
             };
 			void remove(value_type to_remove)
 			{

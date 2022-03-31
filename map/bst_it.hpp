@@ -13,11 +13,12 @@
 #ifndef BINARY_SEARCH_TREE_ITERATOR_HPP
 # define BINARY_SEARCH_TREE_ITERATOR_HPP
 # include "node.hpp"
+# include "bst.hpp"
 # include "../utils/iterator_traits.hpp"
 #include <iostream>
 
 namespace ft {
-    template <typename T, class Compare>
+    template <typename T, class Compare = std::less <> >
     class bst_it : ft::iterator<ft::bidirectional_iterator_tag, T>
     {
         public:
@@ -26,22 +27,27 @@ namespace ft {
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type   difference_type;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer           pointer;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference         reference;
+            typedef ft::node<value_type>                                                              node_type;
         public:
-            node<value_type>      *_node;
-            node<value_type>      *_first;
-            node<value_type>      *_last;
-            Compare               _comp;
+            node_type     *_node;
+            node_type     *_root;
+            node_type     *_first;
+            node_type     *_last;
+            Compare       _comp;
         public:
         //constructor and destructors
             bst_it(const Compare& comp = Compare()) : _node(NULL), _first(NULL), _last(NULL), _comp(comp) {};
-            bst_it(node<value_type> *node, const Compare& comp = Compare()) : _node(node), _first(NULL), _last(NULL), _comp(comp)
+            bst_it(node_type *node, const Compare& comp = Compare()) : _node(node), _first(NULL), _last(NULL), _comp(comp), _root(NULL)
             {
-                node<value_type>  *tmp = _node->_root;
+                node_type  *tmp = _node;
 
+                while (tmp->_parent)
+                    tmp = tmp->_parent;
+                _root = tmp;
                 while (tmp->_left)
                     tmp = tmp->_left;
                 _first = tmp;
-                tmp = _node->_root;
+                tmp = _root;
                 while (tmp->_right)
                     tmp = tmp->_right;
                 _last = tmp;
@@ -49,10 +55,9 @@ namespace ft {
             bst_it(bst_it const &copy) : _node(copy._node), _first(copy._first), _last(copy._last), _comp(copy._comp) {};
             virtual ~bst_it() {};
         //operator overloads    
-            bst_it &operator=(bst_it &rhs)
+            bst_it &operator=(bst_it const &rhs)
             {
-                if (*this == rhs)
-                    return (*this);
+                this->_root = rhs._root;
                 this->_node = rhs._node;
                 this->_first = rhs._first;
                 this->_last = rhs._last;
@@ -67,7 +72,7 @@ namespace ft {
         //increments and decrements
             bst_it& operator++(void)
             {
-                node<value_type> *tmp;
+                node_type *tmp;
                 if (_node == _last)
                     _node++;
                 else if (_node->_right)
@@ -94,7 +99,7 @@ namespace ft {
             };
             bst_it& operator--(void)
             {
-                node<value_type> *tmp;
+                node_type *tmp;
                 tmp = _last;
                 tmp++;
                 if (tmp == _node)
