@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 13:47:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/31 17:46:23 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/01 00:12:19 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ namespace ft
             typedef const T*                            						const_pointer;
 			typedef ft::random_access_iterator<T>           					iterator;
             typedef ft::random_access_iterator<const T>      					const_iterator;
-            typedef ft::reverse_iterator<random_access_iterator<T>>    			reverse_iterator;
-            typedef ft::reverse_iterator<random_access_iterator<const T>>  		const_reverse_iterator;
+            typedef ft::reverse_iterator<iterator>    							reverse_iterator;
+            typedef ft::reverse_iterator<const_iterator>  						const_reverse_iterator;
 			typedef typename  ft::iterator_traits<iterator>::difference_type    difference_type; 
             typedef unsigned int                        						size_type;
         
@@ -83,7 +83,7 @@ namespace ft
             vector(const vector &rhs)
 			: _size(0), _capacity(0), _container(NULL), _allocator(rhs._allocator)
 			{
-				*this = rhs;
+				this->insert(this->begin(), rhs.begin(), rhs.end());
                 return ;
 			};
         // Destructor
@@ -96,13 +96,10 @@ namespace ft
         // Operator overloads
             vector &operator=(const vector &other)
 			{
-				if (this->_container != 0)
-					this->_allocator.deallocate(this->_container, this->_capacity);
-				this->_allocator = other._allocator;
-				this->_capacity = 0;
-				this->_size = 0;
-				this->_container = this->_allocator.allocate(0);
-				this->assign(other.begin(), other.end());
+				if (other == *this)
+					return (*this);
+				this->clear();
+				this->insert(this->begin(), other.begin(), other.end());
 				return (*this);
 			};
     
@@ -158,7 +155,7 @@ namespace ft
         // Returns the maximum number of elements that the vector can hold..
             size_type max_size(void) const
             {
-                return (_allocator.max_size());
+                return (allocator_type().max_size());
             };
         // Resizes the container so that it contains n elements.
             void resize(size_type n, value_type value = value_type())
@@ -318,6 +315,7 @@ namespace ft
             iterator erase(iterator position)
 			{
 				iterator cursor = position;
+				_allocator.destroy(&(*position));
 				while (cursor + 1 != end())
 				{
 					*cursor = *(cursor + 1);
@@ -334,7 +332,7 @@ namespace ft
 					erase(begin);
 					end--;
 				}
-				return (begin);
+				return (iterator(begin));
 			};
         // Exchanges the content of the container by the content of x, which is another vector object of the same type. Sizes may differ.
             void swap (vector& x)
