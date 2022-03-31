@@ -6,14 +6,16 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 01:04:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/30 21:47:57 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/31 17:45:50 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_HPP
 # define MAP_HPP
-# include "binary_search_tree_iterator.hpp"
-# include "reverse_iterator.hpp"
+# include "bst.hpp"
+# include "../utils/enable_if.hpp"
+# include "../utils/reverse_iterator.hpp"
+# include "../utils/pair.hpp"
 # include <functional>
 # include <memory>
 
@@ -54,18 +56,18 @@ namespace ft {
 		private:
             allocator_type          _alloc;
             key_compare             _comp;
-            bst_node<value_type>    *_bst_root;
+            bst<value_type>    		_bst;
 			size_type				_size;
 
         public:
         //Constructors && destructors && = operator
 			explicit map (const key_compare& comp = key_compare(),
-                const allocator_type& alloc = allocator_type()) : _alloc(alloc), _bst_root(NULL), _comp(comp), _size(0) {};
+                const allocator_type& alloc = allocator_type()) : _alloc(alloc), _bst(), _comp(comp), _size(0) {};
 			template <class InputIterator>
   			map (InputIterator first, InputIterator last,
        			const key_compare& comp = key_compare(),
        			const allocator_type& alloc = allocator_type())
-				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) : _comp(comp), _alloc(alloc), _bst_root(NULL), _size(0)
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) : _comp(comp), _alloc(alloc), _bst(), _size(0)
 			{
 				this->insert(first, last);
 			};
@@ -84,18 +86,18 @@ namespace ft {
 			};
 		//Iterators
 		//Returns an iterator referring to the first element in the map container.
-			iterator begin() { return (iterator(_bst_root, _comp)._first); };
-			const_iterator begin() const { return (const_iterator(_bst, _comp)._first); };
+			iterator begin() { return (iterator(_bst.get_root(), _comp)._first); };
+			const_iterator begin() const { return (const_iterator(_bst.get_root(), _comp)._first); };
 		//Returns an iterator referring to the past-the-end element in the map container.
-			iterator end() { return (iterator(_bst_root, _comp)._last++); };
-			const_iterator end() const { return (const_iterator(_bst_root, _comp)._last++); };
+			iterator end() { return (iterator(_bst.get_root(), _comp)._last++); };
+			const_iterator end() const { return (const_iterator(_bst.get_root(), _comp)._last++); };
 		//Returns a reverse iterator pointing to the last element in the container (i.e., its reverse beginning).
-			reverse_iterator rbegin() { return (reverse_iterator(_bst_root, _comp)._last); };
-			const_reverse_iterator rbegin() const { return (const_reverse_iterator(_bst, _comp)._last); };
+			reverse_iterator rbegin() { return (reverse_iterator(_bst.get_root(), _comp)._last); };
+			const_reverse_iterator rbegin() const { return (const_reverse_iterator(_bst.get_root(), _comp)._last); };
 		//Returns a reverse iterator pointing to the theoretical element right before the first element in
 		//the map container (which is considered its reverse end).
-			reverse_iterator rend() { return (reverse_iterator(_bst_root, _comp)._first++); };
-			const_reverse_iterator rend() const { return (const_reverse_iterator(_bst_root, _comp)._first++); };
+			reverse_iterator rend() { return (reverse_iterator(_bst.get_root(), _comp)._first++); };
+			const_reverse_iterator rend() const { return (const_reverse_iterator(_bst, _comp)._first++); };
 		//Capacity
 		//Returns whether the map container is empty (i.e. whether its size is 0).
 			bool empty() const { return (_size == 0); };
@@ -131,32 +133,162 @@ namespace ft {
 				else
 				{
 					ret.second = 1;
-					ret.first = this->insert(iterator(_bst_root), val);
+					ret.first = this->insert(iterator(_bst.get_root()), val);
 				}
 				return (ret);
 			};
+			//give a hint of the position to insert the new value in the bst.
+			//if its good begins from here, if not begins from the root of
+			//the bst
 			iterator insert (iterator position, const value_type& val)
 			{
 				iterator tmp = this->find(val.first);
 
-				if (_size == 0)
-				{
-					bst_node<value_type> tmp(val);
-					bst_root = &tmp;
-					size++;
-				}
 				if (tmp != this->end())
 					return (tmp);
-				iterator tmp = position;
-				iterator tmp1 = position;
-
-				tmp--;
-				tmp1++;
-				if ((*tmp).first < val.first && (*tmp1).first > val.first)
-					return (iterator ret(_bst.add_node(position._node));
-				else
-				
+				if (_size == 0)
+				{
+					_size++;
+					return (this->_bst.insert(val));
+				}
+				_size++;
+				return (this->_bst.insert(position, val));
 			};
+			//version with interators
+			template <class InputIterator>
+				void insert (InputIterator first, InputIterator last,
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
+			{
+				while (first != last)
+				{
+					this->insert(*first);
+					first++;
+				}
+				return ;
+			};
+			//erase iterators
+			void erase (iterator position)
+			{
+				if (this->_bst.remove(position._node->_data))
+					size--;
+				return ;
+			};
+			size_type erase (const key_type& k)
+			{
+				iterator tmp = this->find(k);
+				size_type ret = 0;
+
+				if (tmp == this->end())
+				{
+					while (this->_bst.remove(ft::make_pair(k, mapped_type())))
+					{
+						_size--;
+						ret++;
+					}
+				}
+				return (ret);
+			};
+			void erase (iterator first, iterator last)
+			{
+				while (first != last)
+				{
+					this->erase(first);
+					first++;
+				}
+				return ;
+			};
+			//Exchanges the content of the container by the content of x, which is another map of the same type. Sizes may differ.
+			void swap (map& x)
+			{
+				ft::map<key_type, mapped_type> tmp = this;
+
+				this = x;
+				x = tmp;
+				return ;
+			};
+			//delete all the elements from the map
+			void clear() { this->erase(this->begin(), this->end()); };
+			//Returns a copy of the comparison object used by the container to compare keys.
+			key_compare key_comp() const { return (key_compare()); };
+			//Returns a comparison object that can be used to compare two elements to get whether the key of the first one goes before the second.
+			value_compare value_comp() const { return (value_compare(key_compare())); };
+			//find the value search by the key of it
+			iterator find (const key_type& k)
+			{
+				iterator tmp;
+
+				tmp = this->_bst.search_by_key(ft::make_pair(k, mapped_type())));
+				if (tmp)
+					return (tmp);
+				else
+					return (this->end());
+			};
+			const_iterator find (const key_type& k) const
+			{
+				const_iterator tmp;
+
+				tmp = this->_bst.search_by_key(ft::make_pair(k, mapped_type())));
+				if (tmp)
+					return (tmp);
+				else
+					return (this->end());
+			};
+			//counts the number of elements with the k key
+			size_type count (const key_type& k) const
+			{
+				size_type ret = 0;
+				iterator first = this->begin();
+				iterator last = this->end();
+
+				while (first != last)
+				{
+					if ((*first).first == k)
+						return (ret++);
+					first++;
+				}
+				return (ret);
+			};
+			//Returns an iterator pointing to the first element in the container whose key is not considered to go before k 
+			iterator lower_bound (const key_type& k)
+			{
+				iterator beg = this->begin();
+				iterator end = this->end();
+
+				while (beg != end)
+				{
+					if (_comp((*beg).first, k) == false)
+						break;
+					beg++;
+				}
+				return (beg);
+			}
+			const_iterator lower_bound (const key_type& k) const { return (const_iterator(this->lower_bound(k))); };
+			//Returns an iterator pointing to the first element in the container whose key is considered to go after k.
+			iterator upper_bound (const key_type& k)
+			{
+				iterator beg = this->begin();
+				iterator end = this->end();
+
+				while (beg != end)
+				{
+					if (_comp(k, (*beg).first))
+						break;
+					beg++;
+				}
+				return (beg);
+			};
+			const_iterator upper_bound (const key_type& k) const { return (const_iterator(this->upper_bound(k))); };
+			//Returns the bounds of a range that includes all the elements in the container which have a key equivalent to k.
+			ft::pair<const_iterator, const_iterator> equal_range (const key_type& k) const	
+			{
+				return (ft::make_pair(this->lower_bound(k), this->upper_bound(k)));
+			};
+			ft::pair<iterator, iterator> equal_range (const key_type& k)
+			{
+				return (ft::make_pair(this->lower_bound(k), this->upper_bound(k)));
+			};
+			//return a copy of the allocator_type used by the map
+			allocator_type get_allocator() const { return (this->_alloc); };
     };
 }
 

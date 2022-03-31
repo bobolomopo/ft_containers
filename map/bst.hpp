@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 22:33:19 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/31 03:31:24 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/31 17:30:20 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,102 @@ namespace ft {
 				}
 				remove(tmp._node->_data);
 			}
-            
+            //Accessor to root to construct iterators
+			node_type *get_root() { return (_root); };
 			bool empty() { return (_root == NULL); };
+			iterator insert(iterator hint, value_type value)
+			{
+				value_type	cmp;
+				value_type	cmp_parent;
+				node_type	*base_node_hint = hint._node;
+				bool		correct_place;
+
+				if (hint._node->_parent == NULL || hint._node == NULL)
+					return (this->insert(value));
+				cmp = hint._node->_data;
+				cmp_parent = hint._node->_parent->_data;
+				correct_place = false;
+				//check the place, while parents are lesser or greater keep going.
+				//if we get to the root then the place is ok to place the new node there
+				//if the value of the parent node is greater than the last parent
+				//and the value is lesser than this parents node's data or the contrary
+				//, its ok, if not, its not ok and call the normal insert function.
+				if (cmp < value)
+				{
+					while (hint._node->_parent != NULL && cmp > cmp_parent)
+					{
+						hint._node = hint._node->_parent;
+						cmp = hint._node->_data;
+						cmp_parent = hint._node->_parent->_data;
+					}
+					if (hint._node->_parent == NULL || cmp_parent > value)
+						correct_place = true;
+				}
+				else if if (cmp > value)
+				{
+					while (hint._node->_parent != NULL || cmp < cmp_parent)
+					{
+						cmp = hint._node->_data;
+						cmp_parent = hint._node->_parent->_data;
+						hint._node = hint._node->_parent;
+					}
+					if (hint._node->_parent == NULL || cmp_parent < value)
+						correct_place = true;
+				}
+				//if the place is true, do the same as the insert(value_type) function
+				//but begins from the hint node instead of the root, else just calls
+				//the normal function
+				if (correct_place == true)
+				{
+					node_type* t = _node_alloc.allocate(1);
+					node_type* parent;
+					t->_data.first = value.first;
+					t->_data.second = value.second;
+					t->_left = NULL;
+					t->_rig ht = NULL;
+					t->_parent = NULL;
+					parent = NULL;
+					
+					//if its empty the new node is the root
+					//if not, find the place where the node is placed
+					if (this->empty())
+						_root = t;
+					else
+					{
+						node_type *tmp;
+						tmp = base_node_hint;
+						// Find the Node's parent
+						while (tmp)
+						{
+							parent = tmp;
+							if (t->_data.first > tmp->_data.first)
+								tmp = tmp->_right;
+							else
+								tmp = tmp->_left;
+						}
+						if (t->_data.first < parent->_data.first)
+						{
+							t->_parent = parent;
+							parent->_left = t;
+						}
+						else
+						{
+							t->_parent = parent;
+							parent->_right = t;
+						}
+					}
+					iterator it(t);
+					return (it);
+				}
+				else
+					return (this->insert(value));
+			};
             iterator insert(value_type new_value)
             {
                 node_type* t = _node_alloc.allocate(1);
                 node_type* parent;
                 t->_data.first = new_value.first;
+				t->_data.second = new_value.second;
                 t->_left = NULL;
                 t->_right = NULL;
 				t->_parent = NULL;
@@ -95,11 +184,27 @@ namespace ft {
 				iterator it(t);
 				return (it);
             };
-			void remove(value_type to_remove)
+			node_type *search_by_key(value_type to_search)
+			{
+				node_type *tmp = _root;
+
+				while (tmp)
+				{
+					if (tmp->_data.first > to_search.first)
+						tmp = tmp->_left;
+					else if (tmp->_data.first < to_search.first)
+						tmp = tmp->_right;
+					else
+						return (tmp);
+				}
+				return (tmp);
+			}
+			bool remove(value_type to_remove)
 			{
 				bool found = false;
-				if(this->empty())
-					return ;
+
+				if (this->empty())
+					return (found);
 				node_type *tmp;
 				node_type *parent;
 				tmp = _root;
@@ -120,7 +225,7 @@ namespace ft {
 					}
 				}
 				if (!found)
-					return ;
+					return (found);
 				// Node has a single child and node is the root
 				if ((tmp == _root && tmp->_left == NULL && tmp->_right != NULL) || (tmp == _root && (tmp->_left != NULL && tmp->_right == NULL)))
 				{
@@ -136,6 +241,7 @@ namespace ft {
 						tmp->_left->_parent = NULL;
 						_node_alloc.deallocate(tmp, 1);
 					}
+					return (found);
 				}
 				//node has a single child but is not the root
 				if ((tmp->_left == NULL && tmp->_right != NULL) || (tmp->_left != NULL && tmp->_right == NULL))
@@ -170,7 +276,7 @@ namespace ft {
 							_node_alloc.deallocate(tmp, 1);
 						}
 					}
-					return;
+					return (found);
 				};
 				// The node to remove doesnt have any child
 				if( tmp->_left == NULL && tmp->_right == NULL)
@@ -183,7 +289,7 @@ namespace ft {
 							parent->_right = NULL;
 					}
 					_node_alloc.deallocate(tmp, 1);
-					return;
+					return (found);
 				}
 				//The node to remove has two childs
 				if (tmp->_left != NULL && tmp->_right != NULL)
@@ -260,7 +366,7 @@ namespace ft {
 							_node_alloc.deallocate(tmp, 1);
 						}
 					}
-					return;
+					return (found);
 				}
 			};
     };

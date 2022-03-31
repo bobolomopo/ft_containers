@@ -6,16 +6,16 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 13:47:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/30 15:57:16 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/31 17:46:23 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
-# include "random_access_iterator.hpp"
-# include "is_integral.hpp"
-# include "enable_if.hpp"
-# include "reverse_iterator.hpp"
+# include "../utils/random_access_iterator.hpp"
+# include "../utils/is_integral.hpp"
+# include "../utils/enable_if.hpp"
+# include "../utils/reverse_iterator.hpp"
 # include <memory>
 # include <sstream>
 # include <stdexcept>
