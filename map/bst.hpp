@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 22:33:19 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/31 01:09:29 by jandre           ###   ########.fr       */
+/*   Updated: 2022/03/31 02:10:17 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 # define BST_HPP
 # include <memory>
 # include "node.hpp"
-# include "bst_it.hpp"
 # include <functional>
+# include <iostream>
 
 namespace ft {
-	template <class T, class Compare = std::less<T>, class Node = ft::node<T>,
+	template <class T, class Node = ft::node<T>,
 	class Type_Alloc = std::allocator<T>, class Node_Alloc = std::allocator<Node> >
     class bst
     {
@@ -26,11 +26,11 @@ namespace ft {
 			typedef Type_Alloc	allocator_type;
             typedef Node_Alloc  node_allocator_type;
             typedef Node        node_type;
-            typedef Compare     comp;
 			typedef T			value_type;
 
         private:
-            node_type   *_root;
+            node_type   		*_root;
+			node_allocator_type	_node_alloc;
         
         public:
 		//Constructor && Destructor
@@ -39,22 +39,18 @@ namespace ft {
 			bool empty() { return (_root == NULL); };
             void insert(value_type new_value)
             {
-                node_type* t = node_allocator_type.allocate(1);
+                node_type* t = _node_alloc.allocate(1);
                 node_type* parent;
-                t->_data.first = new_value;
+                t->_data.first = new_value.first;
                 t->_left = NULL;
                 t->_right = NULL;
 				t->_parent = NULL;
-				t->_root = root;
                 parent = NULL;
 				
 				//if its empty the new node is the root
 				//if not, find the place where the node is placed
 				if (this->empty())
-				{
 					_root = t;
-					t->_root = t;
-				}
 				else
 				{
 					node_type *tmp;
@@ -99,29 +95,45 @@ namespace ft {
 					{
 						parent = tmp;
 						if (to_remove.first > tmp->_data.first)
-							tmp = tmp->right;
+							tmp = tmp->_right;
 						else
-							tmp = tmp->left;
+							tmp = tmp->_left;
 					}
 				}
 				if (!found)
 					return ;
-				// Node has a single child
+				// Node has a single child and node is the root
+				if ((tmp == _root && tmp->_left == NULL && tmp->_right != NULL) || (tmp == _root && (tmp->_left != NULL && tmp->_right == NULL)))
+				{
+					if (tmp->_left == NULL && tmp->_right != NULL)
+					{
+						_root = tmp->_right;
+						tmp->_right->_parent = NULL;
+						_node_alloc.deallocate(tmp, 1);
+					}
+					else
+					{
+						_root = tmp->_left;
+						tmp->_left->_parent = NULL;
+						_node_alloc.deallocate(tmp, 1);
+					}
+				}
+				//node has a single child but is not the root
 				if ((tmp->_left == NULL && tmp->_right != NULL) || (tmp->_left != NULL && tmp->_right == NULL))
 				{
 					if (tmp->_left == NULL && tmp->_right != NULL)
 					{
-						if (parent->left == tmp)
+						if (parent->_left == tmp)
 						{
-							parent->left = tmp->right;
+							parent->_left = tmp->_right;
 							tmp->_right->_parent = parent;
-							node_allocator_type.deallocate(tmp);
+							_node_alloc.deallocate(tmp, 1);
 						}
 						else
 						{
 							parent->_right = tmp->_right;
 							tmp->_right->_parent = parent;
-							node_allocator_type.deallocate(tmp);
+							_node_alloc.deallocate(tmp, 1);
 						}
 					}
 					else // left child present, no right child
@@ -130,13 +142,13 @@ namespace ft {
 						{
 							parent->_left = tmp->_left;
 							tmp->_left->_parent = parent;
-							node_allocator_type.deallocate(tmp);
+							_node_alloc.deallocate(tmp, 1);
 						}
 						else
 						{
 							parent->_right = tmp->_left;
 							tmp->_left->_parent = parent;
-							node_allocator_type.deallocate(tmp);
+							_node_alloc.deallocate(tmp, 1);
 						}
 					}
 					return;
@@ -144,11 +156,14 @@ namespace ft {
 				// The node to remove doesnt have any child
 				if( tmp->_left == NULL && tmp->_right == NULL)
 				{
-					if(parent->_left == tmp)
-						parent->_left = NULL;
-					else
-						parent->_right = NULL;
-					node_allocator_type.deallocate(tmp);
+					if (tmp->_parent)
+					{
+						if (parent->_left == tmp)
+							parent->_left = NULL;
+						else
+							parent->_right = NULL;
+					}
+					_node_alloc.deallocate(tmp, 1);
 					return;
 				}
 				//The node to remove has two childs
@@ -161,17 +176,29 @@ namespace ft {
 					if ((check_right->_left == NULL) && (check_right->_right == NULL))
 					{
 						//the right node doesn't have any children
-						check_right->_parent = tmp->_parent;
+						if (tmp->_parent)
+							check_right->_parent = tmp->_parent;
+						else
+						{
+							_root = check_right;
+							check_right->_parent = NULL;
+						}
 						tmp = check_right;
-						node_allocator_type.deallocate(check_right);
+						_node_alloc.deallocate(check_right, 1);
 						tmp->_right = NULL;
 					}
 					else if ((check_left->_left == NULL) && (check_left->_right == NULL))
 					{
 						//the left node doesn't have any children
-						check_left->_parent = tmp->_parent;
+						if (tmp->_parent)
+							check_left->_parent = tmp->_parent;
+						else
+						{
+							_root = check_left;
+							check_left->_parent = NULL;
+						}
 						tmp = check_left;
-						node_allocator_type.deallocate(check_left);
+						_node_alloc.deallocate(check_left, 1);
 						tmp->_left = NULL;
 					}
 					else // right child and left child have children
@@ -189,17 +216,29 @@ namespace ft {
 								first_to_right = last_to_left;
 								last_to_left = last_to_left->_left;
 							}
-							last_to_left->_parent = tmp._parent;
+							if (tmp->_parent)
+								last_to_left->_parent = tmp->_parent;
+							else
+							{
+								_root = last_to_left;
+								last_to_left->_parent = NULL;
+							}
 							tmp = last_to_left;
-							node_allocator_type.deallocate(last_to_left);
-							first_to_right->left = NULL;
+							_node_alloc.deallocate(last_to_left, 1);
+							first_to_right->_left = NULL;
 						}
 						else
 						{
 							node_type *next;
-							*next = *(tmp->right);
-							next->_parent = tmp->_parent;
-							node_allocator_type.deallocate(tmp);
+							next = tmp->_right;
+							if (tmp->_parent)
+								next->_parent = tmp->_parent;
+							else
+							{
+								_root = next;
+								next->_parent = NULL;
+							}
+							_node_alloc.deallocate(tmp, 1);
 						}
 					}
 					return;
