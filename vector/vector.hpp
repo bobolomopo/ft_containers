@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 13:47:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/01 00:12:19 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/01 22:01:30 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <sstream>
 # include <stdexcept>
 # include <limits>
+# include <tgmath.h>
+# include <iostream>
 
 
 namespace ft
@@ -31,16 +33,16 @@ namespace ft
         // all typedef to have the same variable name than cpluscplus.com
             typedef T                                   						value_type;
             typedef Alloc                               						allocator_type;
-            typedef T&                                  						reference;
-            typedef const T&                            						const_reference;
-            typedef T*                                  						pointer;
-            typedef const T*                            						const_pointer;
+            typedef typename allocator_type::reference                          reference;
+            typedef typename allocator_type::const_reference                    const_reference;
+            typedef typename allocator_type::pointer                            pointer;
+            typedef typename allocator_type::const_pointer                      const_pointer;
 			typedef ft::random_access_iterator<T>           					iterator;
             typedef ft::random_access_iterator<const T>      					const_iterator;
             typedef ft::reverse_iterator<iterator>    							reverse_iterator;
             typedef ft::reverse_iterator<const_iterator>  						const_reverse_iterator;
-			typedef typename  ft::iterator_traits<iterator>::difference_type    difference_type; 
-            typedef unsigned int                        						size_type;
+			typedef typename ft::iterator_traits<iterator>::difference_type     difference_type; 
+            typedef typename allocator_type::size_type                        	size_type;
         
         private:
             size_type       _size;
@@ -116,14 +118,13 @@ namespace ft
 			};
         // Returns a reverse iterator pointing to the last element in the vector (i.e., its reverse beginning).
 			reverse_iterator rbegin(void)
-			{
-				
-				return (reverse_iterator(this->end() - 1));
+			{	
+				return (reverse_iterator(this->end()));
 			};
         // Returns a reverse iterator pointing to the theoretical element preceding the first element in the vector (which is considered its reverse end).
 			reverse_iterator rend(void)
 			{
-				return (reverse_iterator(this->begin() - 1));
+				return (reverse_iterator(this->begin()));
 			};
         // Returns a constant iterator pointing to the first element in the vector.
         	const_iterator begin(void) const
@@ -138,12 +139,12 @@ namespace ft
         // Returns a constant reverse iterator pointing to the last element in the vector (i.e., its reverse beginning).
             const_reverse_iterator rbegin(void) const
 			{
-				return (const_reverse_iterator(this->_container + this->_size - 1));
+				return (const_reverse_iterator(this->end()));
 			};
         // Returns a constant reverse iterator pointing to the theoretical element preceding the first element in the vector (which is considered its reverse end).
 			const_reverse_iterator rend(void) const
 			{
-				return (const_reverse_iterator(this->_container - 1));
+				return (const_reverse_iterator(this->begin()));
 			};
     
         // Member functions
@@ -187,7 +188,7 @@ namespace ft
 					tmp  = this->_allocator.allocate(n);
 					this->_capacity = n;
 					while (++i < this->_size)
-						tmp[i] = this->_container[i];
+						_allocator.construct(&(tmp[i]), this->_container[i]);
 					this->_allocator.deallocate(this->_container, this->_capacity);
 					this->_container = tmp;
 				}
@@ -277,6 +278,7 @@ namespace ft
 			{
 				size_type i = 0;
 				iterator it = begin();
+
 				while (i < this->_size && it + i != position)
 				{
 					i++;
@@ -286,11 +288,11 @@ namespace ft
 				size_type j = this->_capacity - 1;
 				while (j > i)
 				{
-					this->_container[j] = this->_container[j - 1];
+					_allocator.construct(&_container[j], _container[j - 1]);
 					j--;
 				}
-				this->_container[i] = value;
 				this->_size++;
+				_allocator.construct(&(this->_container[i]), value);
 				return (iterator(&this->_container[i]));
 			};
         // Fill version
@@ -338,8 +340,11 @@ namespace ft
             void swap (vector& x)
             {
                 vector<value_type> tmp(*this);
+				pointer tmp_pointer = this->_container;
 
+				this->_container = x._container;
                 this->assign(x.begin(), x.end());
+				x._container = tmp_pointer;
                 x = tmp;
             };
         // Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
