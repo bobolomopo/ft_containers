@@ -6,13 +6,15 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 16:28:31 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/22 22:09:24 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/01 22:16:40 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ITERATOR_TRAITS_HPP
 # define ITERATOR_TRAITS_HPP
 # include <cstddef>
+# include <typeinfo>
+# include <stdexcept>
 
 namespace ft {
     //prototypes of the two types of iterators needed for the category of the iterator traits of map and vector.
@@ -34,6 +36,20 @@ namespace ft {
         struct is_iterator_tagged<ft::bidirectional_iterator_tag>
             : public valid_iterator_tag_base<true, ft::bidirectional_iterator_tag> { };
     
+    template <typename T>
+    class invalid_iterator_exception : public std::exception
+    {
+        private:
+            std::string _msg;
+        
+        public :
+            invalid_iterator_exception () throw() { _msg = "Is invalid iterator tag : " + std::string(typeid(T).name()); }
+            invalid_iterator_exception (const invalid_iterator_exception&) throw() {}
+            invalid_iterator_exception& operator= (const invalid_iterator_exception&) throw() {}
+            virtual ~invalid_iterator_exception() throw() {}
+            virtual const char* what() const throw() { return (_msg.c_str()); }
+    };
+
     //Generic definition of iterator traits
     template <class Iterator> class iterator_traits
     {

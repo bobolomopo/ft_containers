@@ -1,9 +1,10 @@
 #include "vector.hpp"
 #include <iostream>
 #include <vector>
+#include <list>
 
 #define TESTED_NAMESPACE ft
-#define TESTED_TYPE std::string
+#define TESTED_TYPE int
 #define T_SIZE_TYPE size_t
 
 template <typename T>
@@ -28,15 +29,6 @@ void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true
 	std::cout << "###############################################" << std::endl;
 }
 
-
-void	checkErase(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct,
-					TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator const &it)
-{
-	static int i = 0;
-	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
-	printSize(vct);
-}
-
 template <typename Ite_1, typename Ite_2>
 void ft_eq_ope(const Ite_1 &first, const Ite_2 &second, const bool redo = 1)
 {
@@ -50,30 +42,22 @@ void ft_eq_ope(const Ite_1 &first, const Ite_2 &second, const bool redo = 1)
 
 int main()
 {
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
+	std::list<TESTED_TYPE> lst;
+	std::list<TESTED_TYPE>::iterator lst_it;
+	for (int i = 1; i < 5; ++i)
+		lst.push_back(i * 3);
+
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(lst.begin(), lst.end());
 	printSize(vct);
 
-	for (unsigned long int i = 0; i < vct.size(); ++i)
-		vct[i] = std::string((vct.size() - i), i + 65);
+	lst_it = lst.begin();
+	for (int i = 1; lst_it != lst.end(); ++i)
+		*lst_it++ = i * 5;
+	vct.assign(lst.begin(), lst.end());
 	printSize(vct);
 
-	checkErase(vct, vct.erase(vct.begin() + 2));
-
-	checkErase(vct, vct.erase(vct.begin()));
-	checkErase(vct, vct.erase(vct.end() - 1));
-
-	checkErase(vct, vct.erase(vct.begin(), vct.begin() + 3));
-	checkErase(vct, vct.erase(vct.end() - 3, vct.end() - 1));
-
-	vct.push_back("Hello");
-	vct.push_back("Hi there");
+	vct.insert(vct.end(), lst.rbegin(), lst.rend());
 	printSize(vct);
-	checkErase(vct, vct.erase(vct.end() - 3, vct.end()));
+	return (0);
 
-	vct.push_back("ONE");
-	vct.push_back("TWO");
-	vct.push_back("THREE");
-	vct.push_back("FOUR");
-	printSize(vct);
-	checkErase(vct, vct.erase(vct.begin(), vct.end()));
 }
