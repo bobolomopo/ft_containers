@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 01:04:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/03 19:01:50 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/04 00:04:12 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "../utils/is_integral.hpp"
 # include "../utils/reverse_iterator.hpp"
 # include "../utils/pair.hpp"
+# include "../utils/lexicographical_compare.hpp"
 # include <functional>
 # include <memory>
 # include <iostream>
@@ -48,28 +49,28 @@ namespace ft {
             typedef typename allocator_type::const_reference                const_reference;
             typedef typename allocator_type::pointer                        pointer;
             typedef typename allocator_type::const_pointer                  const_pointer;
-            typedef typename ft::bst_it<value_type, Compare>                iterator;
-            typedef typename ft::bst_it<const value_type, Compare>          const_iterator;
+            typedef typename ft::bst<value_type, key_type>::iterator                iterator;
+            typedef typename ft::bst<value_type, key_type>::const_iterator          const_iterator;
             typedef typename ft::reverse_iterator<iterator>                 reverse_iterator;
             typedef typename ft::reverse_iterator<const_iterator>           const_reverse_iterator;
             typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
-            typedef size_t                                                  size_type;
+            typedef typename allocator_type::size_type                      size_type;
         
 		private:
-            allocator_type          _alloc;
-            key_compare             _comp;
+            allocator_type          			_alloc;
+            key_compare             			_comp;
             bst<value_type, key_type>    		_bst;
-			size_type				_size;
+			size_type							_size;
 
         public:
         //Constructors && destructors && = operator
 			explicit map (const key_compare& comp = key_compare(),
-                const allocator_type& alloc = allocator_type()) : _alloc(alloc), _bst(), _comp(comp), _size(0) {};
+                const allocator_type& alloc = allocator_type()) : _alloc(alloc), _comp(comp), _bst(), _size(0) {};
 			template <class InputIterator>
   			map (InputIterator first, InputIterator last,
        			const key_compare& comp = key_compare(),
        			const allocator_type& alloc = allocator_type(),
-				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) : _comp(comp), _alloc(alloc), _bst(), _size(0)
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) :  _alloc(alloc), _comp(comp), _bst(), _size(0)
 			{
 				this->insert(first, last);
 			};
@@ -88,22 +89,35 @@ namespace ft {
 			};
 		//Iterators
 		//Returns an iterator referring to the first element in the map container.
-			iterator begin() { return (iterator(_bst.get_root(), _comp)._first); };
-			const_iterator begin() const { return (const_iterator(_bst.get_root(), _comp)._first); };
+			iterator begin() 
+			{
+				iterator tmp(_bst.get_root());
+				
+				return (iterator(tmp._first));
+			};
+			const_iterator begin() const 
+			{
+				iterator tmp(_bst.get_root());
+				
+				return (const_iterator(tmp._first));
+			};
 		//Returns an iterator referring to the past-the-end element in the map container.
 			iterator end()
 			{
-				iterator it(_bst.get_root(), _comp);
-				it._node = it._last;
-				it++;
-				return (it);
+				iterator tmp(_bst.get_root());
+				iterator ite(tmp._last);
+				ite++;
+				
+				return (ite);
 			};
 			const_iterator end() const 
-			{
-				const_iterator it(_bst.get_root(), _comp);
-				it._node = it._last;
-				it++;
-				return (it);
+			{	
+				iterator tmp(_bst.get_root());
+				iterator ite(tmp._last);
+				ite++;
+
+				const_iterator ret(ite);
+				return (ret);
 			};
 		//Returns a reverse iterator pointing to the last element in the container (i.e., its reverse beginning).
 			reverse_iterator rbegin() { return (reverse_iterator(this->end())); };
@@ -118,7 +132,7 @@ namespace ft {
 		//Returns the number of elements in the containers
 			size_type size() const { return (_size); };
 		//Returns the maximum number of elements that the map container can hold.
-			size_type max_size() const { return (_alloc.max_size()); };
+			size_type max_size() const { return (allocator_type().max_size()); };
 		//Element access
 		//If k matches the key of an element in the container, the function returns a reference to its mapped value.
 		//If k does not match the key of any element in the container, the function inserts a new element with that
@@ -231,20 +245,20 @@ namespace ft {
 			//find the value search by the key of it
 			iterator find (const key_type& k)
 			{
-				iterator tmp(this->_bst.search_by_key(ft::make_pair(k, mapped_type())));
+				ft::node<value_type> *tmp = _bst.search_by_key(k);
 
-				if (tmp._node != NULL)
-					return (tmp);
+				if (tmp != NULL)
+					return (iterator(tmp));
 				else
 					return (this->end());
 			};
 			const_iterator find (const key_type& k) const
 			{
-				const_iterator tmp;
+				iterator tmp;
 
-				tmp = this->_bst.search_by_key(ft::make_pair(k, mapped_type()));
-				if (tmp)
-					return (tmp);
+				tmp = this->_bst.search_by_key(k);
+				if (tmp != this->end())
+					return (const_iterator(tmp));
 				else
 					return (this->end());
 			};
@@ -276,8 +290,20 @@ namespace ft {
 					beg++;
 				}
 				return (beg);
-			}
-			const_iterator lower_bound (const key_type& k) const { return (const_iterator(this->lower_bound(k))); };
+			};	
+			const_iterator lower_bound (const key_type& k) const 
+			{
+				iterator beg = this->begin();
+				iterator end = this->end();
+
+				while (beg != end)
+				{
+					if (_comp((*beg).first, k) == false)
+						break;
+					beg++;
+				}
+				return (const_iterator(beg));
+			};
 			//Returns an iterator pointing to the first element in the container whose key is considered to go after k.
 			iterator upper_bound (const key_type& k)
 			{
@@ -292,7 +318,19 @@ namespace ft {
 				}
 				return (beg);
 			};
-			const_iterator upper_bound (const key_type& k) const { return (const_iterator(this->upper_bound(k))); };
+			const_iterator upper_bound (const key_type& k) const 
+			{
+				iterator beg = this->begin();
+				iterator end = this->end();
+
+				while (beg != end)
+				{
+					if (_comp(k, (*beg).first))
+						break;
+					beg++;
+				}
+				return (const_iterator(beg));
+			};
 			//Returns the bounds of a range that includes all the elements in the container which have a key equivalent to k.
 			ft::pair<const_iterator, const_iterator> equal_range (const key_type& k) const	
 			{
@@ -305,6 +343,49 @@ namespace ft {
 			//return a copy of the allocator_type used by the map
 			allocator_type get_allocator() const { return (this->_alloc); };
     };
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator==( const ft::map<Key,T,Compare,Alloc>& lhs,
+                 const ft::map<Key,T,Compare,Alloc>& rhs )
+	{
+		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+	};
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator!=( const ft::map<Key,T,Compare,Alloc>& lhs,
+                 const ft::map<Key,T,Compare,Alloc>& rhs )
+	{
+		return (!(ft::equal(lhs.begin(), lhs.end(), rhs.begin())));
+	};
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator<( const ft::map<Key,T,Compare,Alloc>& lhs,
+                 const ft::map<Key,T,Compare,Alloc>& rhs )
+	{
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	};
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator>( const ft::map<Key,T,Compare,Alloc>& lhs,
+                 const ft::map<Key,T,Compare,Alloc>& rhs )
+	{
+		return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+	};
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator>=( const ft::map<Key,T,Compare,Alloc>& lhs,
+                 const ft::map<Key,T,Compare,Alloc>& rhs )
+	{
+		bool equal = ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+		if (equal)
+			return (equal);
+		return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+	};
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator<=( const ft::map<Key,T,Compare,Alloc>& lhs,
+                 const ft::map<Key,T,Compare,Alloc>& rhs )
+	{
+		bool equal = ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+		if (equal)
+			return (equal);
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	};
 }
+
 
 #endif

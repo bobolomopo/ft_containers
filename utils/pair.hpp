@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 16:03:02 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/01 23:39:19 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/03 21:57:44 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,8 @@ namespace ft
         //operator overload
         pair& operator=(const pair &pr)
         {
-            if (*this != pr)
-            {
-                this->first = pr.first;
-                this->second = pr.second;
-            }
+            this->first = pr.first;
+            this->second = pr.second;
             return (*this);
         };
     };

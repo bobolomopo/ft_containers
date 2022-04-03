@@ -14,11 +14,12 @@
 # define BINARY_SEARCH_TREE_ITERATOR_HPP
 # include "node.hpp"
 # include "bst.hpp"
+# include <functional>
 # include "../utils/iterator_traits.hpp"
 #include <iostream>
 
 namespace ft {
-    template <typename T, class Compare = std::less<>>
+    template <typename T, class KeyType, class Compare = std::less<KeyType> >
     class bst_it : ft::iterator<ft::bidirectional_iterator_tag, T>
     {
         public:
@@ -36,21 +37,26 @@ namespace ft {
             Compare       _comp;
         public:
         //constructor and destructors
+				
             bst_it(const Compare& comp = Compare()) : _node(NULL), _first(NULL), _last(NULL), _comp(comp) {};
-            bst_it(node_type *node, const Compare& comp = Compare()) : _node(node), _first(NULL), _last(NULL), _comp(comp), _root(NULL)
+            bst_it(node_type *node, const Compare& comp = Compare()) : _node(node), _root(NULL), _first(NULL), _last(NULL) , _comp(comp)
             {
                 node_type  *tmp = _node;
 
-                while (tmp->_parent)
-                    tmp = tmp->_parent;
-                _root = tmp;
-                while (tmp->_left)
-                    tmp = tmp->_left;
-                _first = tmp;
-                tmp = _root;
-                while (tmp->_right)
-                    tmp = tmp->_right;
-                _last = tmp;
+                if (node)
+                {
+                    while (tmp->_parent)
+                        tmp = tmp->_parent;
+                    _root = tmp;
+                    while (tmp->_left)
+                        tmp = tmp->_left;
+                    _first = tmp;
+                    tmp = _root;
+                    while (tmp->_right)
+                        tmp = tmp->_right;
+                    _last = tmp;
+                }
+
             };
             bst_it(bst_it const &copy) : _node(copy._node), _first(copy._first), _last(copy._last), _comp(copy._comp) {};
             virtual ~bst_it() {};
@@ -119,7 +125,7 @@ namespace ft {
                 else if (tmp->_parent)
                 {
                     tmp = _node->_parent;
-                    while (!_comp(tmp->_data, _node->_data) && tmp->_parent)
+                    while (!_comp(tmp->_data.first, _node->_data.first) && tmp->_parent)
                         tmp = tmp->_parent;
                     _node = tmp;
                 }
@@ -147,6 +153,78 @@ namespace ft {
                     rhs--;
                 }
             }
+    };
+    template <typename T, class KeyType>
+    bool operator==(const ft::bst_it<T, KeyType> lhs,
+              const ft::bst_it<T, KeyType> rhs)
+    {
+        return (lhs._node == rhs._node);
+    };
+    template<typename T_L, typename T_R, class KeyType>
+    bool operator==(const ft::bst_it<T_L, KeyType> lhs,
+              const ft::bst_it<T_R, KeyType> rhs)
+    {
+        return (lhs._node == rhs._node);
+    };
+    template <typename T, class KeyType>
+    bool operator!=(const ft::bst_it<T, KeyType> lhs,
+              const ft::bst_it<T, KeyType> rhs)
+    {
+        return (lhs._node != rhs._node);
+    };
+    template<typename T_L, typename T_R, class KeyType>
+    bool operator!=(const ft::bst_it<T_L, KeyType> lhs,
+              const ft::bst_it<T_R, KeyType> rhs)
+    {
+        return (lhs._node != rhs._node);
+    };
+    template <typename T, class KeyType>
+    bool operator>(const ft::bst_it<T, KeyType> lhs,
+              const ft::bst_it<T, KeyType> rhs)
+    {
+        return (lhs._node > rhs._node);
+    };
+    template<typename T_L, typename T_R, class KeyType>
+    bool operator>(const ft::bst_it<T_L, KeyType> lhs,
+              const ft::bst_it<T_R, KeyType> rhs)
+    {
+        return (lhs._node > rhs._node);
+    };
+    template <typename T, class KeyType>
+    bool operator>=(const ft::bst_it<T, KeyType> lhs,
+              const ft::bst_it<T, KeyType> rhs)
+    {
+        return (lhs._node >= rhs._node);
+    };
+    template<typename T_L, typename T_R, class KeyType>
+    bool operator>=(const ft::bst_it<T_L, KeyType> lhs,
+              const ft::bst_it<T_R, KeyType> rhs)
+    {
+        return (lhs._node >= rhs._node);
+    };
+    template <typename T, class KeyType>
+    bool operator<(const ft::bst_it<T, KeyType> lhs,
+              const ft::bst_it<T, KeyType> rhs)
+    {
+        return (lhs._node < rhs._node);
+    };
+    template<typename T_L, typename T_R, class KeyType>
+    bool operator<(const ft::bst_it<T_L, KeyType> lhs,
+              const ft::bst_it<T_R, KeyType> rhs)
+    {
+        return (lhs._node < rhs._node);
+    };
+    template <typename T, class KeyType>
+    bool operator<=(const ft::bst_it<T, KeyType> lhs,
+              const ft::bst_it<T, KeyType> rhs)
+    {
+        return (lhs._node <= rhs._node);
+    };
+    template<typename T_L, typename T_R, class KeyType>
+    bool operator<=(const ft::bst_it<T_L, KeyType> lhs,
+              const ft::bst_it<T_R, KeyType> rhs)
+    {
+        return (lhs._node <= rhs._node);
     };
 }
 #endif
