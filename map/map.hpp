@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 01:04:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/02 01:04:59 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/03 19:01:50 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ namespace ft {
 		private:
             allocator_type          _alloc;
             key_compare             _comp;
-            bst<value_type>    		_bst;
+            bst<value_type, key_type>    		_bst;
 			size_type				_size;
 
         public:

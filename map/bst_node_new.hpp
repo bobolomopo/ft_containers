@@ -20,27 +20,27 @@ namespace ft {
 		public :
 			typedef T	value_type;
 
-			value_type	_value;
+			value_type	_data;
 			node		*_parent;
 			node		*_left;
 			node		*_right;
 
 		//Constructor && destructors
-			node () : _value(), _parent(NULL), _left(NULL), _right(NULL) {};
+			node () : _data(), _parent(NULL), _left(NULL), _right(NULL) {};
 			node (node* parent = NULL, node *left = NULL, node *right = NULL) :
-				_value(), _parent(parent), _left(left), _right(right)
+				_data(), _parent(parent), _left(left), _right(right)
 			{};
 			node (const value_type &val, node *parent = NULL, node *left = NULL, node *right = NULL) : 
-				_value(val), _parent(parent), _left(left), _right(right)
+				_data(val), _parent(parent), _left(left), _right(right)
 			{};
-			node (const node& copy) : _value(copy._value), _parent(copy._parent), _left(copy._left), _right(copy._right) {};
+			node (const node& copy) : _data(copy._data), _parent(copy._parent), _left(copy._left), _right(copy._right) {};
 			virtual ~node() {}
 			node &operator=(const node &rhs)
 			{
 				if (rhs == *this)
 					return (*this);
 				
-				this->_value = rhs._value;
+				this->_data = rhs._data;
 				this->_parent = rhs._parent;
 				this->_left = rhs._left;
 				this->_right = rhs._right;
@@ -49,7 +49,7 @@ namespace ft {
 			}
 			bool operator==(const node& rhs)
 			{
-				if (_value == rhs._value)
+				if (_data == rhs._data)
 					return (true);
 				return (false);
 			}

@@ -27,6 +27,7 @@ namespace ft {
         node() :  _parent(NULL), _left(NULL), _right(NULL), _data() {};
         node(value_type new_data) :  _parent(NULL), _left(NULL), _right(NULL), _data(new_data) {};
         node(node const &copy) : _parent(copy._parent), _left(copy._left), _right(copy._right), _data(copy._data) {};
+        virtual ~node() {};
         node &operator=(node const &rhs)
         {
             if (*this == rhs)

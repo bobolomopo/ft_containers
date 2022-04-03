@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 16:54:25 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/03 17:35:34 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/03 18:05:08 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ namespace ft {
 				_last_node->right = _BST_get_higher_node(_last_node->parent);
 				_last_node->value.first += 1;
 				return (ft::make_pair(iterator(new_node, _last_node), true));
-			}
+			};
+	};
 }
 
 #endif

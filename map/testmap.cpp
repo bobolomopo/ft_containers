@@ -6,28 +6,41 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 23:27:24 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/02 00:57:25 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/03 19:36:06 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <list>
 #include "map.hpp"
+#include "bst.hpp"
 #include <map>
 
 int main()
 {
-    ft::map<int, int> map1;
-    ft::map<int, int> map2;
-    ft::map<int, int> map3;
-    ft::map<int, int> map4;
     ft::pair<int, int> p1(123, 124);
-    ft::map<int, int>::iterator it = map1.begin();
-    ft::map<int, int>::iterator ite = map1.end();
+    ft::pair<int, int> p2(123123, 124);
+    ft::pair<int, int> p3(1231, 124);
+    ft::pair<int, int> p4(-23, 124);
+    ft::pair<int, int> p5(-123, 124);
+    ft::pair<int, int> p6(-11123, 124);
+    ft::pair<int, int> p7(-8123, 124);
+    ft::bst<ft::pair<const int, int>, const int> bst;
+    ft::node<ft::pair<int, int>> *node;
 
-    map1.insert(p1);
-    std::cout << "begin " << (it != ite) << std::endl;
-    std::cout << "end " << (*map1.end()).first << std::endl;
-    std::cout << "begin " << (*map1.begin()).second << std::endl;
-    std::cout << "end " << (*map1.end()).second << std::endl;
+    bst.insert(p1);
+    bst.insert(p2);
+    bst.insert(p3);
+    bst.insert(p4);
+    bst.insert(p5);
+    bst.insert(p6);
+    bst.insert(p7);
+    ft::map<int, int>::iterator it(bst.get_root());
+    ft::map<int, int>::iterator itf(it._first);
+    ft::map<int, int>::iterator ite(it._last);
+    while ((*itf) != (*ite))
+    {
+        std::cout << (*itf).first << std::endl;
+        itf++;
+    }
     return (0);
 }

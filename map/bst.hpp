@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 22:33:19 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/02 01:00:54 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/03 19:33:33 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,41 +19,40 @@
 # include <iostream>
 
 namespace ft {
-	template <class T, class Node = ft::node<T>,
-	class Type_Alloc = std::allocator<T>, class Node_Alloc = std::allocator<Node> >
+	template <class T, class Key_Type, class Node = ft::node<T>, class Type_Alloc = std::allocator<T>, class Node_Alloc = std::allocator<Node> >
     class bst
     {
 		public:
-			typedef Type_Alloc	allocator_type;
-            typedef Node_Alloc  node_allocator_type;
-            typedef Node        node_type;
-			typedef T											value_type;
-			typedef typename ft::bst_it<value_type>                iterator;
+			typedef Type_Alloc							allocator_type;
+            typedef Node_Alloc  						node_alloc;
+			typedef Key_Type							key_type;
+            typedef Node        						node_type;
+			typedef T									value_type;
+			typedef typename ft::bst_it<value_type>     iterator;
 
         private:
             node_type   		*_root;
-			node_allocator_type	_node_alloc;
+			node_alloc			_node_alloc;
         
         public:
 		//Constructor && Destructor
-            bst(const node_allocator_type &node_alloc_init = node_allocator_type()) : _node_alloc(node_alloc_init), _root(NULL)
+            bst(const node_alloc &node_alloc_init = node_alloc()) : _node_alloc(node_alloc_init), _root(NULL) { };
+			bst(node_type *root, const node_alloc &node_alloc_init = node_alloc()) : _node_alloc(node_alloc_init), _root(root)
 			{
 				_root = _node_alloc.allocate(1);
-				_node_alloc.construct(_root, node_type());
+				_node_alloc.construct(_root, node_type(_root->_data));
 			};
-			~bst()
+			virtual ~bst()
 			{
-				/*iterator it(_root);
-				iterator tmp(it._first);
-				node_type *tmp_data;
+				iterator it(_root);
+				iterator ite(it._last);
+				iterator itf(it._first);
 
-				while (tmp._node->_data.first != it._last->_data.first)
+				while ((*itf) != (*ite))
 				{
-					tmp_data = tmp._node;
-					tmp++;
-					remove(tmp_data);
+					_node_alloc.deallocate(itf._node, 1);
+					itf++;
 				}
-				remove(tmp._node->_data);*/
 			}
             //Accessor to root to construct iterators
 			node_type *get_root() { return (_root); };
@@ -103,12 +102,8 @@ namespace ft {
 				if (correct_place == true)
 				{
 					node_type* t = _node_alloc.allocate(1);
-					node_type* parent;
-					t->_data.first = value.first;
-					t->_data.second = value.second;
-					t->_left = NULL;
-					t->_right = NULL;
-					t->_parent = NULL;
+					_node_alloc.construct(t, node_type(value));
+					node_type *parent;
 					parent = NULL;
 					
 					//if its empty the new node is the root
@@ -148,12 +143,8 @@ namespace ft {
             iterator insert(value_type new_value)
             {
                 node_type* t = _node_alloc.allocate(1);
+				_node_alloc.construct(t, node_type(new_value));
                 node_type* parent;
-                t->_data.first = new_value.first;
-				t->_data.second = new_value.second;
-                t->_left = NULL;
-                t->_right = NULL;
-				t->_parent = NULL;
                 parent = NULL;
 				
 				//if its empty the new node is the root

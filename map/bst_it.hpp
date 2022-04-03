@@ -18,7 +18,7 @@
 #include <iostream>
 
 namespace ft {
-    template <typename T, class Compare = std::less<T>>
+    template <typename T, class Compare = std::less<>>
     class bst_it : ft::iterator<ft::bidirectional_iterator_tag, T>
     {
         public:
@@ -27,7 +27,7 @@ namespace ft {
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type   difference_type;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer           pointer;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference         reference;
-            typedef ft::node<value_type>                                                              node_type;
+            typedef ft::node<value_type>                                                                 node_type;
         public:
             node_type     *_node;
             node_type     *_root;
