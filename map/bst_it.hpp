@@ -18,7 +18,7 @@
 #include <iostream>
 
 namespace ft {
-    template <typename T, class Compare = std::less <> >
+    template <typename T, class Compare = std::less<T>>
     class bst_it : ft::iterator<ft::bidirectional_iterator_tag, T>
     {
         public:
@@ -85,7 +85,7 @@ namespace ft {
                 else if (_node->_parent)
                 {
                     tmp = _node->_parent;
-                    while (_comp(tmp->_data, _node->_data) && tmp->_parent)
+                    while (_comp(tmp->_data.first, _node->_data.first) && tmp->_parent)
                         tmp = tmp->_parent;
                     _node = tmp;
                 }

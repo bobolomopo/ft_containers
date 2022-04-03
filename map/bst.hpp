@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 22:33:19 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/31 17:30:20 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/02 01:00:54 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "node.hpp"
 # include "bst_it.hpp"
 # include <functional>
+# include <iostream>
 
 namespace ft {
 	template <class T, class Node = ft::node<T>,
@@ -26,7 +27,7 @@ namespace ft {
 			typedef Type_Alloc	allocator_type;
             typedef Node_Alloc  node_allocator_type;
             typedef Node        node_type;
-			typedef T			value_type;
+			typedef T											value_type;
 			typedef typename ft::bst_it<value_type>                iterator;
 
         private:
@@ -35,22 +36,24 @@ namespace ft {
         
         public:
 		//Constructor && Destructor
-            bst() : _root() {};
+            bst(const node_allocator_type &node_alloc_init = node_allocator_type()) : _node_alloc(node_alloc_init), _root(NULL)
+			{
+				_root = _node_alloc.allocate(1);
+				_node_alloc.construct(_root, node_type());
+			};
 			~bst()
 			{
-				iterator it(_root);
+				/*iterator it(_root);
 				iterator tmp(it._first);
-				value_type tmp_data;
-				int i = 0;
+				node_type *tmp_data;
 
-				while (i < 10 && tmp._node->_data.first != it._last->_data.first)
+				while (tmp._node->_data.first != it._last->_data.first)
 				{
-					tmp_data = tmp._node->_data;
+					tmp_data = tmp._node;
 					tmp++;
 					remove(tmp_data);
-					i++;
 				}
-				remove(tmp._node->_data);
+				remove(tmp._node->_data);*/
 			}
             //Accessor to root to construct iterators
 			node_type *get_root() { return (_root); };
@@ -83,7 +86,7 @@ namespace ft {
 					if (hint._node->_parent == NULL || cmp_parent > value)
 						correct_place = true;
 				}
-				else if if (cmp > value)
+				else if (cmp > value)
 				{
 					while (hint._node->_parent != NULL || cmp < cmp_parent)
 					{
@@ -104,7 +107,7 @@ namespace ft {
 					t->_data.first = value.first;
 					t->_data.second = value.second;
 					t->_left = NULL;
-					t->_rig ht = NULL;
+					t->_right = NULL;
 					t->_parent = NULL;
 					parent = NULL;
 					
@@ -198,7 +201,7 @@ namespace ft {
 						return (tmp);
 				}
 				return (tmp);
-			}
+			};
 			bool remove(value_type to_remove)
 			{
 				bool found = false;
@@ -277,7 +280,7 @@ namespace ft {
 						}
 					}
 					return (found);
-				};
+				}
 				// The node to remove doesnt have any child
 				if( tmp->_left == NULL && tmp->_right == NULL)
 				{
@@ -366,8 +369,8 @@ namespace ft {
 							_node_alloc.deallocate(tmp, 1);
 						}
 					}
-					return (found);
 				}
+				return (found);
 			};
     };
 }

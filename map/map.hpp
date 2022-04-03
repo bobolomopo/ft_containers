@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 01:04:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/03/31 17:45:50 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/02 01:04:59 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 # define MAP_HPP
 # include "bst.hpp"
 # include "../utils/enable_if.hpp"
+# include "../utils/is_integral.hpp"
 # include "../utils/reverse_iterator.hpp"
 # include "../utils/pair.hpp"
 # include <functional>
 # include <memory>
+# include <iostream>
 
 namespace ft {
     template < class Key, class T,
@@ -66,7 +68,7 @@ namespace ft {
 			template <class InputIterator>
   			map (InputIterator first, InputIterator last,
        			const key_compare& comp = key_compare(),
-       			const allocator_type& alloc = allocator_type())
+       			const allocator_type& alloc = allocator_type(),
 				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) : _comp(comp), _alloc(alloc), _bst(), _size(0)
 			{
 				this->insert(first, last);
@@ -89,15 +91,27 @@ namespace ft {
 			iterator begin() { return (iterator(_bst.get_root(), _comp)._first); };
 			const_iterator begin() const { return (const_iterator(_bst.get_root(), _comp)._first); };
 		//Returns an iterator referring to the past-the-end element in the map container.
-			iterator end() { return (iterator(_bst.get_root(), _comp)._last++); };
-			const_iterator end() const { return (const_iterator(_bst.get_root(), _comp)._last++); };
+			iterator end()
+			{
+				iterator it(_bst.get_root(), _comp);
+				it._node = it._last;
+				it++;
+				return (it);
+			};
+			const_iterator end() const 
+			{
+				const_iterator it(_bst.get_root(), _comp);
+				it._node = it._last;
+				it++;
+				return (it);
+			};
 		//Returns a reverse iterator pointing to the last element in the container (i.e., its reverse beginning).
-			reverse_iterator rbegin() { return (reverse_iterator(_bst.get_root(), _comp)._last); };
-			const_reverse_iterator rbegin() const { return (const_reverse_iterator(_bst.get_root(), _comp)._last); };
+			reverse_iterator rbegin() { return (reverse_iterator(this->end())); };
+			const_reverse_iterator rbegin() const { return (const_reverse_iterator(this->end())); };
 		//Returns a reverse iterator pointing to the theoretical element right before the first element in
 		//the map container (which is considered its reverse end).
-			reverse_iterator rend() { return (reverse_iterator(_bst.get_root(), _comp)._first++); };
-			const_reverse_iterator rend() const { return (const_reverse_iterator(_bst, _comp)._first++); };
+			reverse_iterator rend() { return (reverse_iterator(this->begin())); };
+			const_reverse_iterator rend() const { return (const_reverse_iterator(this->begin())); };
 		//Capacity
 		//Returns whether the map container is empty (i.e. whether its size is 0).
 			bool empty() const { return (_size == 0); };
@@ -124,8 +138,9 @@ namespace ft {
 			{
 				ft::pair<iterator, bool> ret;
 				iterator tmp = this->find(val.first);
-
-				if (tmp != this->end())
+				iterator ite = this->end();
+				
+				if (tmp != ite)
 				{
 					ret.second = 0;
 					ret.first = tmp;
@@ -143,8 +158,9 @@ namespace ft {
 			iterator insert (iterator position, const value_type& val)
 			{
 				iterator tmp = this->find(val.first);
+				iterator ite = this->end();
 
-				if (tmp != this->end())
+				if (tmp != ite)
 					return (tmp);
 				if (_size == 0)
 				{
@@ -170,7 +186,7 @@ namespace ft {
 			void erase (iterator position)
 			{
 				if (this->_bst.remove(position._node->_data))
-					size--;
+					_size--;
 				return ;
 			};
 			size_type erase (const key_type& k)
@@ -215,10 +231,9 @@ namespace ft {
 			//find the value search by the key of it
 			iterator find (const key_type& k)
 			{
-				iterator tmp;
+				iterator tmp(this->_bst.search_by_key(ft::make_pair(k, mapped_type())));
 
-				tmp = this->_bst.search_by_key(ft::make_pair(k, mapped_type())));
-				if (tmp)
+				if (tmp._node != NULL)
 					return (tmp);
 				else
 					return (this->end());
@@ -227,7 +242,7 @@ namespace ft {
 			{
 				const_iterator tmp;
 
-				tmp = this->_bst.search_by_key(ft::make_pair(k, mapped_type())));
+				tmp = this->_bst.search_by_key(ft::make_pair(k, mapped_type()));
 				if (tmp)
 					return (tmp);
 				else
