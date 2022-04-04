@@ -6,59 +6,57 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 23:27:24 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/03 23:51:28 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/04 03:28:26 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <list>
+#include <map>
 #include "map.hpp"
-#include "../containers_test/srcs/base.hpp"
+//#include "../containers_test/srcs/base.hpp"
 #include "../containers_test/srcs/map/common.hpp"
 #include "bst.hpp"
-#include <map>
 #include <list>
 
-#define T1 char
-#define T2 int
+#define T1 int
+#define T2 std::string
 typedef _pair<const T1, T2> T3;
-//#define TESTED_NAMESPACE std
 
-template <class MAP>
-void	cmp(const MAP &lhs, const MAP &rhs)
+static int iter = 0;
+
+template <typename MAP, typename U>
+void	ft_erase(MAP &mp, U param)
 {
-	static int i = 0;
-
-	std::cout << "############### [" << i++ << "] ###############"  << std::endl;
-	std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << std::endl;
-	std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
-	std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
+	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+	std::cout << "ret: " << mp.erase(param) << std::endl;
+	printSize(mp);
 }
 
 int		main(void)
 {
-	TESTED_NAMESPACE::map<T1, T2> mp1;
-	TESTED_NAMESPACE::map<T1, T2> mp2;
+	std::list<T3> lst;
+	unsigned int lst_size = 6;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
+	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+	printSize(mp);
 
-	mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
-	mp2['a'] = 2; mp2['b'] = 3; mp2['c'] = 4; mp2['d'] = 5;
+	for (int i = 2; i < 4; ++i)
+		ft_erase(mp, i);
 
-	cmp(mp1, mp1); // 0
-	cmp(mp1, mp2); // 1
+	ft_erase(mp, mp.begin()->first);
+	ft_erase(mp, (--mp.end())->first);
 
-	mp2['e'] = 6; mp2['f'] = 7; mp2['h'] = 8; mp2['h'] = 9;
+	mp[-1] = "Hello";
+	mp[10] = "Hi there";
+	mp[10] = "Hi there";
 
-	cmp(mp1, mp2); // 2
-	cmp(mp2, mp1); // 3
+	printSize(mp);
 
-	(++(++mp1.begin()))->second = 42;
+	ft_erase(mp, 0);
 
-	cmp(mp1, mp2); // 4
-	cmp(mp2, mp1); // 5
-
-	swap(mp1, mp2);
-
-	cmp(mp1, mp2); // 6
-	cmp(mp2, mp1); // 7
+	ft_erase(mp, 1);
 
 	return (0);
 }
+

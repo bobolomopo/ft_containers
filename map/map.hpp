@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 01:04:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/04 00:04:12 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/04 03:31:35 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ namespace ft {
 			{
 				this->insert(x.begin(), x.end());
 			};
+							
             ~map() { this->clear(); };
 			map& operator= (const map& rhs)
 			{
@@ -91,13 +92,17 @@ namespace ft {
 		//Returns an iterator referring to the first element in the map container.
 			iterator begin() 
 			{
+				if (_size == 0)
+					return (this->end());
 				iterator tmp(_bst.get_root());
 				
 				return (iterator(tmp._first));
 			};
 			const_iterator begin() const 
 			{
-				iterator tmp(_bst.get_root());
+				if (_size == 0)
+					return (this->end());
+				const_iterator tmp(_bst.get_root());
 				
 				return (const_iterator(tmp._first));
 			};
@@ -112,8 +117,8 @@ namespace ft {
 			};
 			const_iterator end() const 
 			{	
-				iterator tmp(_bst.get_root());
-				iterator ite(tmp._last);
+				const_iterator tmp(_bst.get_root());
+				const_iterator ite(tmp._last);
 				ite++;
 
 				const_iterator ret(ite);
@@ -132,7 +137,7 @@ namespace ft {
 		//Returns the number of elements in the containers
 			size_type size() const { return (_size); };
 		//Returns the maximum number of elements that the map container can hold.
-			size_type max_size() const { return (allocator_type().max_size()); };
+			size_type max_size() const { return (_bst.max_size()); };
 		//Element access
 		//If k matches the key of an element in the container, the function returns a reference to its mapped value.
 		//If k does not match the key of any element in the container, the function inserts a new element with that
@@ -199,7 +204,7 @@ namespace ft {
 			//erase iterators
 			void erase (iterator position)
 			{
-				if (this->_bst.remove(position._node->_data))
+				if (_size > 0 && this->_bst.remove(position._node->_data))
 					_size--;
 				return ;
 			};
@@ -208,13 +213,12 @@ namespace ft {
 				iterator tmp = this->find(k);
 				size_type ret = 0;
 
-				if (tmp == this->end())
+				if (tmp != this->end())
 				{
-					while (this->_bst.remove(ft::make_pair(k, mapped_type())))
-					{
+					this->_bst.remove(ft::make_pair(k, mapped_type()));
+					if (_size > 0)
 						_size--;
-						ret++;
-					}
+					ret++;
 				}
 				return (ret);
 			};
@@ -230,9 +234,9 @@ namespace ft {
 			//Exchanges the content of the container by the content of x, which is another map of the same type. Sizes may differ.
 			void swap (map& x)
 			{
-				ft::map<key_type, mapped_type> tmp = this;
+				ft::map<key_type, mapped_type> tmp = *this;
 
-				this = x;
+				*this = x;
 				x = tmp;
 				return ;
 			};
@@ -254,7 +258,7 @@ namespace ft {
 			};
 			const_iterator find (const key_type& k) const
 			{
-				iterator tmp;
+				const_iterator tmp;
 
 				tmp = this->_bst.search_by_key(k);
 				if (tmp != this->end())
@@ -293,8 +297,8 @@ namespace ft {
 			};	
 			const_iterator lower_bound (const key_type& k) const 
 			{
-				iterator beg = this->begin();
-				iterator end = this->end();
+				const_iterator beg = this->begin();
+				const_iterator end = this->end();
 
 				while (beg != end)
 				{
@@ -320,8 +324,8 @@ namespace ft {
 			};
 			const_iterator upper_bound (const key_type& k) const 
 			{
-				iterator beg = this->begin();
-				iterator end = this->end();
+				const_iterator beg = this->begin();
+				const_iterator end = this->end();
 
 				while (beg != end)
 				{

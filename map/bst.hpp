@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 22:33:19 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/03 23:12:42 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/04 04:21:39 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,17 @@ namespace ft {
 			typedef T									value_type;
 			typedef typename ft::bst_it<value_type, key_type>     iterator;
 			typedef typename ft::bst_it<value_type, key_type>     const_iterator;
+			typedef typename node_alloc::size_type		size_type;
 
         private:
             node_type   		*_root;
 			node_alloc			_node_alloc;
+			bool				_is_empty;
         
         public:
 		//Constructor && Destructor
-            bst(const node_alloc &node_alloc_init = node_alloc()) : _root(NULL), _node_alloc(node_alloc_init){ };
-			bst(node_type *root, const node_alloc &node_alloc_init = node_alloc()) : _node_alloc(node_alloc_init), _root(root)
+            bst(const node_alloc &node_alloc_init = node_alloc()) : _root(NULL), _node_alloc(node_alloc_init), _is_empty(true) {};
+			bst(node_type *root, const node_alloc &node_alloc_init = node_alloc()) : _node_alloc(node_alloc_init), _root(root), _is_empty(true)
 			{
 				_root = _node_alloc.allocate(1);
 				_node_alloc.construct(_root, node_type(_root->_data));
@@ -57,7 +59,9 @@ namespace ft {
 			}
             //Accessor to root to construct iterators
 			node_type *get_root() const { return (_root); };
+
 			bool empty() { return (_root == NULL); };
+			size_type max_size(void) const { return (node_alloc().max_size());};
 			iterator insert(iterator hint, value_type value)
 			{
 				bool		correct_place;
@@ -96,8 +100,11 @@ namespace ft {
 					
 					//if its empty the new node is the root
 					//if not, find the place where the node is placed
-					if (this->empty())
+					if (_is_empty)
+					{
+						_is_empty = false;
 						_root = t;
+					}
 					else
 					{
 						node_type *tmp;
@@ -137,8 +144,11 @@ namespace ft {
 				
 				//if its empty the new node is the root
 				//if not, find the place where the node is placed
-				if (this->empty())
+				if (_is_empty)
+				{
+					_is_empty = false;
 					_root = t;
+				}
 				else
 				{
 					node_type *tmp;
@@ -186,7 +196,7 @@ namespace ft {
 			{
 				bool found = false;
 
-				if (this->empty())
+				if (_is_empty)
 					return (found);
 				node_type *tmp;
 				node_type *parent;
@@ -218,10 +228,13 @@ namespace ft {
 							parent->_left = NULL;
 						else
 							parent->_right = NULL;
+						_node_alloc.deallocate(tmp, 1);
 					}
 					else
-						_root = NULL;
-					_node_alloc.deallocate(tmp, 1);
+					{
+						_is_empty = true;
+						_node_alloc.deallocate(tmp, 1);
+					}
 					return (found);
 				}
 				// Node has a single child and node is the root
@@ -254,6 +267,7 @@ namespace ft {
 						}
 						else
 						{
+							
 							parent->_right = tmp->_right;
 							tmp->_right->_parent = parent;
 							_node_alloc.deallocate(tmp, 1);
@@ -297,7 +311,7 @@ namespace ft {
 						_node_alloc.deallocate(check_right, 1);
 						tmp->_right = NULL;
 					}
-					else if ((check_left->_left == NULL) && (check_left->_right == NULL))
+					/*else if ((check_left->_left == NULL) && (check_left->_right == NULL))
 					{
 						//the left node doesn't have any children
 						if (tmp->_parent)
@@ -310,7 +324,7 @@ namespace ft {
 						tmp = check_left;
 						_node_alloc.deallocate(check_left, 1);
 						tmp->_left = NULL;
-					}
+					}*/
 					else // right child and left child have children
 					{
 						//if the node's right child has a left child
@@ -342,7 +356,8 @@ namespace ft {
 						else
 						{
 							node_type *next;
-							next = tmp->_right;
+							next = tmp->_left;
+							next->_right = tmp->_right;
 							if (tmp->_parent)
 								next->_parent = tmp->_parent;
 							else
