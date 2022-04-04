@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 22:33:19 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/04 04:21:39 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/04 06:27:49 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,17 +180,18 @@ namespace ft {
 			{
 				node_type *tmp = _root;
 
-				while (tmp)
+				while (tmp != NULL)
 				{
-
-					if (tmp->_data.first > to_search)
+					if (tmp->_data.first == to_search)
+						return (tmp);
+					else if (tmp->_left && tmp->_data.first > to_search)
 						tmp = tmp->_left;
-					else if (tmp->_data.first < to_search)
+					else if (tmp->_right && tmp->_data.first < to_search)
 						tmp = tmp->_right;
 					else
-						return (tmp);
+						break ;
 				}
-				return (tmp);
+				return (NULL);
 			};
 			bool remove(value_type to_remove)
 			{

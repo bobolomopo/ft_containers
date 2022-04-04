@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 01:04:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/04 03:31:35 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/04 06:34:38 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,16 +92,12 @@ namespace ft {
 		//Returns an iterator referring to the first element in the map container.
 			iterator begin() 
 			{
-				if (_size == 0)
-					return (this->end());
 				iterator tmp(_bst.get_root());
 				
 				return (iterator(tmp._first));
 			};
 			const_iterator begin() const 
 			{
-				if (_size == 0)
-					return (this->end());
 				const_iterator tmp(_bst.get_root());
 				
 				return (const_iterator(tmp._first));
@@ -109,18 +105,22 @@ namespace ft {
 		//Returns an iterator referring to the past-the-end element in the map container.
 			iterator end()
 			{
+				if (_size == 0)
+					return (this->begin());
 				iterator tmp(_bst.get_root());
 				iterator ite(tmp._last);
+
 				ite++;
-				
 				return (ite);
 			};
 			const_iterator end() const 
-			{	
+			{
+				if (_size == 0)
+					return (this->begin());
 				const_iterator tmp(_bst.get_root());
 				const_iterator ite(tmp._last);
-				ite++;
 
+				ite++;
 				const_iterator ret(ite);
 				return (ret);
 			};
@@ -251,10 +251,10 @@ namespace ft {
 			{
 				ft::node<value_type> *tmp = _bst.search_by_key(k);
 
-				if (tmp != NULL)
-					return (iterator(tmp));
-				else
+				if (tmp == NULL)
 					return (this->end());
+				else
+					return (iterator(tmp));
 			};
 			const_iterator find (const key_type& k) const
 			{

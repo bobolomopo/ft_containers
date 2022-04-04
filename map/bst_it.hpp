@@ -34,12 +34,13 @@ namespace ft {
             node_type     *_root;
             node_type     *_first;
             node_type     *_last;
+            bool          _is_end;
             Compare       _comp;
         public:
         //constructor and destructors
 				
-            bst_it(const Compare& comp = Compare()) : _node(NULL), _first(NULL), _last(NULL),_comp(comp) {};
-            bst_it(node_type *node, const Compare& comp = Compare()) : _node(node), _root(NULL), _first(NULL), _last(NULL), _comp(comp)
+            bst_it(const Compare& comp = Compare()) : _node(NULL), _first(NULL), _last(NULL), _is_end(true), _comp(comp) {};
+            bst_it(node_type *node, const Compare& comp = Compare()) : _node(node), _root(NULL), _first(NULL), _last(NULL), _is_end(false), _comp(comp)
             {
                 node_type  *tmp = _node;
 
@@ -55,6 +56,8 @@ namespace ft {
                     while (tmp->_right)
                         tmp = tmp->_right;
                     _last = tmp;
+                    if (_first == _last)
+                        _is_end = true;
                 }
 
             };
@@ -68,19 +71,40 @@ namespace ft {
                 this->_first = rhs._first;
                 this->_last = rhs._last;
                 this->_comp = rhs._comp;
+                this->_is_end = rhs._is_end;
                 return (*this);
             };
-            bool operator==(bst_it &rhs) { return (this->_node == rhs._node); };
-            bool operator!=(bst_it &rhs) { return (this->_node != rhs._node); };
+            bool operator==(bst_it &rhs)
+            {
+                if (this->_is_end == true && rhs._is_end == true && this->_node == rhs._node)
+                    return (true);
+                return (this->_node == rhs._node);
+            };
+            bool operator!=(bst_it &rhs)
+            {
+                if (this->_is_end == true && rhs._is_end == true)
+                    return (false);
+                if (this->_is_end == false && rhs._is_end == false)
+                {
+                    if (rhs._node == this->_node)
+                        return (false);
+                    if (rhs._node != this->_node)
+                        return (true);
+                }
+                return (false);
+            };
         //reference && dereference
-            value_type &operator*(void) const {return (this->_node->_data); };
+            value_type &operator*(void) const 
+            {
+                return (this->_node->_data);
+            };
             value_type *operator->(void) const { return (&this->_node->_data); };
         //increments and decrements
             bst_it& operator++(void)
             {
                 node_type *tmp;
-                if (_node == _last)
-                    _node++;
+                if (_is_end == false && _node == _last)
+                    _is_end = true;
                 else if (_node->_right)
                 {
                     tmp = _node->_right;
@@ -107,13 +131,10 @@ namespace ft {
             {
                 node_type *tmp;
 
-                tmp = _last;
-                if (tmp++ == _node)
-                {
-                    _node = _last;
-                    return (*this);
-                }
-                if (_node == _first)
+                tmp = _node;
+                if (_is_end == true)
+                    _is_end = false;
+                else if (_node == _first)
                     return (*this);
                 else if (_node->_left)
                 {
@@ -170,12 +191,13 @@ namespace ft {
             node_type     *_root;
             node_type     *_first;
             node_type     *_last;
+            bool          _is_end;
             Compare       _comp;
         public:
         //constructor and destructors
 				
-            bst_it_const(const Compare& comp = Compare()) : _node(NULL), _first(NULL), _last(NULL), _comp(comp) {};
-            bst_it_const(node_type *node, const Compare& comp = Compare()) : _node(node), _root(NULL), _first(NULL), _last(NULL) , _comp(comp)
+            bst_it_const(const Compare& comp = Compare()) : _node(NULL), _first(NULL), _last(NULL), _is_end(true), _comp(comp) {};
+            bst_it_const(node_type *node, const Compare& comp = Compare()) : _node(node), _root(NULL), _first(NULL), _last(NULL), _is_end(false), _comp(comp)
             {
                 node_type  *tmp = _node;
 
@@ -191,6 +213,8 @@ namespace ft {
                     while (tmp->_right)
                         tmp = tmp->_right;
                     _last = tmp;
+                    if (_root == _last)
+                        _is_end = true;
                 }
 
             };
@@ -204,10 +228,21 @@ namespace ft {
                 this->_first = rhs._first;
                 this->_last = rhs._last;
                 this->_comp = rhs._comp;
+                this->_is_end = rhs._is_end;
                 return (*this);
             };
-            bool operator==(bst_it_const &rhs) { return (this->_node == rhs._node); };
-            bool operator!=(bst_it_const &rhs) { return (this->_node != rhs._node); };
+            bool operator==(bst_it_const &rhs) 
+            {
+                if (rhs._is_end == true && this->_is_end == true)
+                    return (true);
+                return (this->_node == rhs._node);
+            };
+            bool operator!=(bst_it_const &rhs)
+            {
+                if (this->_is_end == rhs._is_end && this->_node != rhs._node)
+                    return (true);
+                return (false);
+            };
         //reference && dereference
             const value_type &operator*(void) const { return (this->_node->_data); };
             const value_type *operator->(void) const { return (&this->_node->_data); };
@@ -216,7 +251,7 @@ namespace ft {
             {
                 node_type *tmp;
                 if (_node == _last)
-                    _node++;
+                    _is_end = true;
                 else if (_node->_right)
                 {
                     tmp = _node->_right;
@@ -242,11 +277,11 @@ namespace ft {
             bst_it_const& operator--(void)
             {
                 node_type *tmp;
-                tmp = _last;
-                tmp++;
-                if (tmp == _node)
+
+                tmp = _node;
+                if (_is_end == true && tmp == _last)
                 {
-                    _node--;
+                    _is_end = false;
                     return (*this);
                 }
                 if (_node == _first)
