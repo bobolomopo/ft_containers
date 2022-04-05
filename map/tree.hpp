@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 03:14:59 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/05 15:43:22 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/05 19:40:04 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,16 +90,16 @@ namespace ft {
 			const_iterator end() const		        	{ return const_iterator(this->_end); }
 
 		//Reverse iterators and const_reverse iterators
-			reverse_iterator rbegin()		        	{ return reverse_iterator(this->_end)++; };
+			reverse_iterator rbegin()		        	{ return reverse_iterator(this->_end); };
 			const_reverse_iterator rbegin() const		{ return const_reverse_iterator(this->_end); };
 			reverse_iterator rend()			        	{ return reverse_iterator(this->get_min(this->_root)); };
 			const_reverse_iterator rend() const	    	{ return const_reverse_iterator(this->get_min(this->_root)); };
 
 		//Size and allocator
 			bool empty() const			            	{ return (this->_size == 0); };
-			size_type size() const			        	{ return this->_size; };
-			size_type max_size() const		        	{ return this->_alloc.max_size(); };
-			node_allocator get_allocator() const		{ return this->_alloc; };
+			size_type size() const			        	{ return (this->_size); };
+			size_type max_size() const		        	{ return (node_allocator().max_size()); };
+			node_allocator get_allocator() const		{ return (this->_alloc); };
 		//Accessors
 			node_pointer get_end() const				{ return (this->_end); };
 			

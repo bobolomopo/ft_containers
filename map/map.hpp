@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 14:27:45 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/05 15:42:58 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/05 18:29:53 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,12 @@ namespace ft {
 		map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type(),
 			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 			: _tree(comp, alloc), _comp(comp) 					{ this->insert(first, last); };
-		map(const map& x) 										{ *this = x; };
+		map(const map& x) : _comp(x._comp)						{ this->insert(x.begin(), x.end()); };
 		~map() 													{ this->clear(); };
 
 		map &operator=(const map &rhs)
 		{
-			if (*this == rhs)
+			if (this == &rhs)
 				return (*this);
 			this->clear();
 			this->insert(rhs.begin(), rhs.end());
@@ -94,14 +94,14 @@ namespace ft {
 		};
 
 		//Iterators
-		iterator begin()										{ return this->_tree.begin(); };
-		const_iterator begin() const							{ return this->_tree.begin(); };
-		iterator end()											{ return this->_tree.end(); };
-		const_iterator end() const								{ return this->_tree.end(); };
-		reverse_iterator rbegin()								{ return this->_tree.rbegin(); };
-		const_reverse_iterator rbegin() const					{ return this->_tree.rbegin(); };
-		reverse_iterator rend()									{ return this->_tree.rend(); };
-		const_reverse_iterator rend() const						{ return this->_tree.rend(); };
+		iterator begin()										{ return (this->_tree.begin()); };
+		const_iterator begin() const							{ return (this->_tree.begin()); };
+		iterator end()											{ return (this->_tree.end()); };
+		const_iterator end() const								{ return (this->_tree.end()); };
+		reverse_iterator rbegin()								{ return (this->_tree.rbegin()); };
+		const_reverse_iterator rbegin() const					{ return (this->_tree.rbegin()); };
+		reverse_iterator rend()									{ return (this->_tree.rend()); };
+		const_reverse_iterator rend() const						{ return (this->_tree.rend()); };
     
 		//Capacity and size
 		bool empty() const										{ return this->_tree.empty(); };
