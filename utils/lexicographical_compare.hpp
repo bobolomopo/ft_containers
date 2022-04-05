@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 21:55:44 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/04 00:03:23 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/05 20:29:23 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ namespace ft {
     {
         while (first1!=last1)
         {
-            if (!(*first1 == *first2))   // or: if (!pred(*first1,*first2)), for version 2
+            if (!(*first1 == *first2)) 
                 return false;
             ++first1;
             ++first2;
