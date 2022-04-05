@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 14:27:45 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/05 18:29:53 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/05 20:32:45 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,13 +208,13 @@ namespace ft {
 	bool operator==( const ft::map<Key,T,Compare,Alloc>& lhs,
                  const ft::map<Key,T,Compare,Alloc>& rhs )
 	{
-		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()) && ft::equal(rhs.begin(), rhs.end(), lhs.begin()));
 	};
 	template< class Key, class T, class Compare, class Alloc >
 	bool operator!=( const ft::map<Key,T,Compare,Alloc>& lhs,
                  const ft::map<Key,T,Compare,Alloc>& rhs )
 	{
-		return (!(ft::equal(lhs.begin(), lhs.end(), rhs.begin())));
+		return (!(operator==(lhs, rhs)));
 	};
 	template< class Key, class T, class Compare, class Alloc >
 	bool operator<( const ft::map<Key,T,Compare,Alloc>& lhs,
@@ -232,7 +232,7 @@ namespace ft {
 	bool operator>=( const ft::map<Key,T,Compare,Alloc>& lhs,
                  const ft::map<Key,T,Compare,Alloc>& rhs )
 	{
-		bool equal = ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+		bool equal = operator==(lhs, rhs);
 		if (equal)
 			return (equal);
 		return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
@@ -241,7 +241,7 @@ namespace ft {
 	bool operator<=( const ft::map<Key,T,Compare,Alloc>& lhs,
                  const ft::map<Key,T,Compare,Alloc>& rhs )
 	{
-		bool equal = ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+		bool equal = operator==(lhs, rhs);
 		if (equal)
 			return (equal);
 		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
