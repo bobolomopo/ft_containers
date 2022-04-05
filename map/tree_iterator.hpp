@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 02:59:14 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/05 19:50:22 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/05 19:58:26 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ namespace ft {
 			template <class Iter>
 			tree_it(const tree_it<Iter, node_pointer>& copy) : _node(copy.base()) {};
 			template <class Iter>
-			tree_it(const Iter& copy) : _node(copy.base()) {};
+			tree_it(const Iter& copy) : _node(copy) {};
 
 			node_pointer base() const		{ return (this->_node); };
 			reference operator*() const		{ return (this->_node->data); };
