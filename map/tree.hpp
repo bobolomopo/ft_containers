@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 03:14:59 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/05 19:40:04 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/05 20:43:54 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ namespace ft {
 		Node*	parent;
 		Node*	left;
 		Node*	right;
+		Node*	end;
 
 		Node(T new_data) : data(new_data) {};
 	};
