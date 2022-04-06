@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 03:14:59 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/05 20:43:54 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/06 06:40:30 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,6 @@
 # include "../utils/reverse_iterator.hpp"
 
 namespace ft {
-    template <class T>
-	class Node {
-	public:
-		T		data;
-		Node*	parent;
-		Node*	left;
-		Node*	right;
-		Node*	end;
-
-		Node(T new_data) : data(new_data) {};
-	};
-    
     template <class T, class Compare, class Allocator>
 	class tree
     {
@@ -43,10 +31,12 @@ namespace ft {
             typedef typename node_allocator::const_reference					node_const_reference;
             typedef typename node_allocator::difference_type					node_difference_type;
             typedef typename node_allocator::pointer							alloc_node_pointer;
-            typedef typename node_allocator::const_pointer						node_const_pointer;
+            typedef typename node_allocator::const_pointer						alloc_node_const_pointer;
             typedef typename node_allocator::size_type							node_size_type;
             typedef Node<value_type>											node_type;
+			typedef Node<const value_type>										node_const_type;
             typedef node_type *                                                 node_pointer;
+			typedef node_const_type	*											node_const_pointer;
         public:
             typedef typename allocator_type::reference							reference;
             typedef typename allocator_type::const_reference					const_reference;
@@ -54,13 +44,14 @@ namespace ft {
             typedef typename allocator_type::pointer							pointer;
             typedef typename allocator_type::const_pointer						const_pointer;
             typedef typename allocator_type::size_type							size_type;
-            typedef ft::tree_it<pointer, node_pointer>							iterator;
-            typedef ft::tree_it<const_pointer, node_pointer>					const_iterator;
+            typedef ft::tree_it<value_type>										iterator;
+            typedef ft::tree_it<value_type>										const_iterator;
             typedef ft::reverse_iterator<iterator>								reverse_iterator;
             typedef ft::reverse_iterator<const_iterator>						const_reverse_iterator;
         
         private:
             node_pointer        _root;
+			node_const_pointer	_root_const;
             size_t              _size;
             key_compare         _comp;
             node_allocator      _alloc;
@@ -85,16 +76,16 @@ namespace ft {
 		    };
 
 		//Iterators && const_iterators
-			iterator begin()				        	{ return iterator(this->get_min(this->_root)); };
-			const_iterator begin() const	        	{ return const_iterator(this->get_min(this->_root)); };
-			iterator end()					        	{ return iterator(this->_end); }
-			const_iterator end() const		        	{ return const_iterator(this->_end); }
+			iterator begin()				        	{ return (iterator(this->get_min(this->_root))); };
+			const_iterator begin() const	        	{ return (const_iterator(this->get_min(this->_root))); };
+			iterator end()					        	{ return (iterator(this->_end)); }
+			const_iterator end() const		        	{ return (const_iterator(this->_end)); }
 
 		//Reverse iterators and const_reverse iterators
-			reverse_iterator rbegin()		        	{ return reverse_iterator(this->_end); };
-			const_reverse_iterator rbegin() const		{ return const_reverse_iterator(this->_end); };
-			reverse_iterator rend()			        	{ return reverse_iterator(this->get_min(this->_root)); };
-			const_reverse_iterator rend() const	    	{ return const_reverse_iterator(this->get_min(this->_root)); };
+			reverse_iterator rbegin()		        	{ return (reverse_iterator(this->_end)); };
+			const_reverse_iterator rbegin() const		{ return (const_reverse_iterator(this->_end)); };
+			reverse_iterator rend()			        	{ return (reverse_iterator(this->get_min(this->_root))); };
+			const_reverse_iterator rend() const	    	{ return (const_reverse_iterator(this->get_min(this->_root))); };
 
 		//Size and allocator
 			bool empty() const			            	{ return (this->_size == 0); };
@@ -336,7 +327,7 @@ namespace ft {
 	{
 		while (node->left != NULL)
 			node = node->left;
-		return node;
+		return (node);
 	};
 	//getting biggest node
 	template <class node_pointer>
@@ -344,7 +335,7 @@ namespace ft {
 	{
 		while (node->right != NULL)
 			node = node->right;
-		return node;
+		return (node);
 	};
 	//getting next node value wise
 	template <class node_pointer>
@@ -357,7 +348,7 @@ namespace ft {
 			node = temp;
 			temp = temp->parent;
 		}
-		return temp;
+		return (temp);
 	};
 	//getting last node value wise
 	template <class node_pointer>
@@ -370,7 +361,7 @@ namespace ft {
 			node = temp;
 			temp = temp->parent;
 		}
-		return temp;
+		return (temp);
 	};
 }
 

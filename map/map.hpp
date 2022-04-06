@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 14:27:45 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/05 20:32:45 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/05 23:21:35 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,10 @@ namespace ft {
 			node_pointer temp = position.base();
 			node_pointer successor = get_successor(temp);
 			node_pointer end = this->_tree.get_end();
-			
+			iterator found = find(val.first);
+
+			if (found != this->end())
+				return (found);
 			if ((temp != end && temp->data.first < val.first) &&
 				(successor == end || successor->data.first > val.first)) //checking if the position is good to insert
 				position = iterator(this->_tree.insert_hint(temp, val));
