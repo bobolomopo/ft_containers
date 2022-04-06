@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 02:59:14 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/05 23:26:49 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/06 06:54:44 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ namespace ft {
 			tree_it() : _node() {};
 			tree_it(node_pointer node) : _node(node) {};
 			tree_it(const tree_it &copy) : _node(copy.base()) {};
-			template <class Iter>
-			tree_it(const Iter& copy) : _node(copy) {};
 			tree_it &operator=(const tree_it &rhs)
 			{
 				if (this == &rhs)
