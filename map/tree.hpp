@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 03:14:59 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 06:57:34 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/06 07:28:32 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,29 @@ namespace ft {
 			};
 			node_pointer insert_hint(node_pointer position, const value_type &val) 
 			{
+				node_pointer tmp = position;
+				
+				//Check if it is at the good place in the tree
+				if (this->_comp(tmp->data.first, val.first)) //if the val is lower than the hinted position, goes until a parent is greater, see if the val is lesser than it too
+				{
+					tmp = tmp->parent;
+					while (tmp->parent && this->_comp(tmp->data.first, tmp->parent->data.first))
+						tmp = tmp->parent;
+					if (tmp->data.first == val.first)
+						return (tmp);
+					if (tmp != _root && this->_comp(tmp->parent->data.first, val.first))
+						return (add_node(this->_root, this->_root, val, val.first));
+				}
+				else if (this->_comp(val.first, tmp->data.first)) // does the contrary than above, if it goes to the root, it means its ok
+				{
+					tmp = tmp->parent;
+					while (tmp->parent && this->_comp(tmp->parent->data.first, tmp->data.first))
+						tmp = tmp->parent;
+					if (tmp->data.first == val.first)
+						return (tmp);
+					if (tmp != _root && this->_comp(val.first, tmp->parent->data.first))
+						return (add_node(this->_root, this->_root, val, val.first));
+				}
 				node_pointer ret = add_node(position, position, val, val.first);
 				if (this->_root->parent)
 					this->_root = this->_root->parent;

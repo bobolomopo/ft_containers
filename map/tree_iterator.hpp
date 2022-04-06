@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 02:59:14 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 06:56:42 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/06 07:04:05 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ namespace ft {
 				this->_node = rhs._node;
 				return (*this);
 			};
+			virtual ~tree_it() {};
 
 			node_pointer base() const		{ return (this->_node); };
 			reference operator*() const		{ return (this->_node->data); };
