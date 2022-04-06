@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
+/*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 13:47:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/01 22:26:03 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/06 19:45:59 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../utils/is_integral.hpp"
 # include "../utils/enable_if.hpp"
 # include "../utils/reverse_iterator.hpp"
+# include "../utils/lexicographical_compare.hpp"
 # include <memory>
 # include <sstream>
 # include <stdexcept>
@@ -98,7 +99,7 @@ namespace ft
         // Operator overloads
             vector &operator=(const vector &other)
 			{
-				if (other == *this)
+				if (&other == this)
 					return (*this);
 				this->clear();
 				this->insert(this->begin(), other.begin(), other.end());
@@ -358,10 +359,25 @@ namespace ft
                 return (this->_allocator);
             };
     };
+
 // Non member fonction
 // Boolean operator
+
     template<class T, class Alloc>
     bool operator==(const vector<T, Alloc> &a, const vector<T, Alloc> &b)
+	{
+		if (a.size() != b.size())
+			return (false);
+		unsigned long i = -1;
+		while (++i < a.size())
+		{
+			if (a[i] != b[i])
+				return (false);
+		}
+		return (true);
+	};
+	template<class T_R, class T_L, class Alloc>
+    bool operator==(const T_L &a, const T_R &b)
 	{
 		if (a.size() != b.size())
 			return (false);
