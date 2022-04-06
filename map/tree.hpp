@@ -6,7 +6,7 @@
 /*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 03:14:59 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 06:53:50 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/06 06:57:34 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,8 @@ namespace ft {
             typedef typename node_allocator::const_pointer						alloc_node_const_pointer;
             typedef typename node_allocator::size_type							node_size_type;
             typedef Node<value_type>											node_type;
-			typedef Node<const value_type>										node_const_type;
             typedef node_type *                                                 node_pointer;
-			typedef node_const_type	*											node_const_pointer;
+
         public:
             typedef typename allocator_type::reference							reference;
             typedef typename allocator_type::const_reference					const_reference;
@@ -51,7 +50,6 @@ namespace ft {
         
         private:
             node_pointer        _root;
-			node_const_pointer	_root_const;
             size_t              _size;
             key_compare         _comp;
             node_allocator      _alloc;
