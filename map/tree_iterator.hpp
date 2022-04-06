@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 02:59:14 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 15:47:54 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/06 16:23:26 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,6 @@
 # include "../utils/iterator_traits.hpp"
 
 namespace ft {
-	template <class T>
-	class Node {
-	public:
-		T		data;
-		Node*	parent;
-		Node*	left;
-		Node*	right;
-
-		Node(T new_data) : data(new_data) {};
-	};
     template <class Node_Type, class T>
 	class tree_it : public ft::iterator<ft::bidirectional_iterator_tag, T> 
 	{
@@ -56,9 +46,7 @@ namespace ft {
 			};
 			virtual ~tree_it() {};
 
-			operator tree_it<const Node_Type, T>(void) const {
-			return tree_it<const Node_Type, T>(this->_node);
-		}
+			operator tree_it<const Node_Type, T>(void) const { return tree_it<const Node_Type, T>(this->_node); }
 			node_pointer base() const		{ return (this->_node); };
 			reference operator*() const		{ return (this->_node->data); };
 			pointer operator->() const		{ return (&(operator*())); };

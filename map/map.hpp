@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 14:27:45 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 12:48:14 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/06 16:11:39 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,9 @@ namespace ft {
 		const_reverse_iterator rend() const						{ return (this->_tree.rend()); };
     
 		//Capacity and size
-		bool empty() const										{ return this->_tree.empty(); };
-		size_type size() const									{ return this->_tree.size(); };
-		size_type max_size() const								{ return this->_tree.max_size(); };
+		bool empty() const										{ return (this->_tree.empty()); };
+		size_type size() const									{ return (this->_tree.size()); };
+		size_type max_size() const								{ return (this->_tree.max_size()); };
 	
 		//Element access
 		//If the key doesnt not exist, create one with no elements mapped_type in it.

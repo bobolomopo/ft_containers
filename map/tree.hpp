@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 03:14:59 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 15:54:20 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/06 16:14:11 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,19 @@
 # include "../utils/reverse_iterator.hpp"
 
 namespace ft {
+	template <class T>
+	class Node {
+	private:
+		int		height;
+		bool	unused;
+	public:
+		T		data;
+		Node*	parent;
+		Node*	left;
+		Node*	right;
+
+		Node(T new_data) : data(new_data), parent(NULL), left(NULL), right(NULL) {};
+	};
     template <class T, class Compare, class Allocator>
 	class tree
     {
