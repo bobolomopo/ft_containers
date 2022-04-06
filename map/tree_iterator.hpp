@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 02:59:14 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 16:23:26 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/06 16:49:12 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ namespace ft {
 			};
 			virtual ~tree_it() {};
 
-			operator tree_it<const Node_Type, T>(void) const { return tree_it<const Node_Type, T>(this->_node); }
+			//operator tree_it<const Node_Type, T>(void) const { return tree_it<const Node_Type, T>(this->_node); }
 			node_pointer base() const		{ return (this->_node); };
 			reference operator*() const		{ return (this->_node->data); };
 			pointer operator->() const		{ return (&(operator*())); };
