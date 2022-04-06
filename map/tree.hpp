@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   tree.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
+/*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 03:14:59 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 07:28:32 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/06 15:54:20 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TREE_HPP
 # define TREE_HPP
 
-#include "tree_iterator.hpp"
+# include "tree_iterator.hpp"
 # include "../utils/reverse_iterator.hpp"
 
 namespace ft {
@@ -34,7 +34,9 @@ namespace ft {
             typedef typename node_allocator::const_pointer						alloc_node_const_pointer;
             typedef typename node_allocator::size_type							node_size_type;
             typedef Node<value_type>											node_type;
+			typedef Node<const value_type>										const_node_type;
             typedef node_type *                                                 node_pointer;
+			typedef const_node_type *											const_node_pointer;
 
         public:
             typedef typename allocator_type::reference							reference;
@@ -43,8 +45,8 @@ namespace ft {
             typedef typename allocator_type::pointer							pointer;
             typedef typename allocator_type::const_pointer						const_pointer;
             typedef typename allocator_type::size_type							size_type;
-            typedef ft::tree_it<value_type>										iterator;
-            typedef ft::tree_it<value_type>										const_iterator;
+            typedef ft::tree_it<node_type, value_type>							iterator;
+            typedef ft::tree_it<node_type, const value_type>					const_iterator;
             typedef ft::reverse_iterator<iterator>								reverse_iterator;
             typedef ft::reverse_iterator<const_iterator>						const_reverse_iterator;
         
@@ -75,15 +77,15 @@ namespace ft {
 
 		//Iterators && const_iterators
 			iterator begin()				        	{ return (iterator(this->get_min(this->_root))); };
-			const_iterator begin() const	        	{ return (const_iterator(this->get_min(this->_root))); };
+			const_iterator begin() const	        	{ return (const_iterator((this->get_min(this->_root)))); };
 			iterator end()					        	{ return (iterator(this->_end)); }
-			const_iterator end() const		        	{ return (const_iterator(this->_end)); }
+			const_iterator end() const		        	{ return (const_iterator((this->_end))); }
 
 		//Reverse iterators and const_reverse iterators
 			reverse_iterator rbegin()		        	{ return (reverse_iterator(this->_end)); };
-			const_reverse_iterator rbegin() const		{ return (const_reverse_iterator(this->_end)); };
+			const_reverse_iterator rbegin() const		{ return (const_reverse_iterator((this->_end))); };
 			reverse_iterator rend()			        	{ return (reverse_iterator(this->get_min(this->_root))); };
-			const_reverse_iterator rend() const	    	{ return (const_reverse_iterator(this->get_min(this->_root))); };
+			const_reverse_iterator rend() const	    	{ return (const_reverse_iterator((this->get_min(this->_root)))); };
 
 		//Size and allocator
 			bool empty() const			            	{ return (this->_size == 0); };
@@ -179,6 +181,10 @@ namespace ft {
 				}
 				return (temp);
 			};
+			/*const_node_pointer const_lower_bound(key_type key) const
+			{
+				return (to_const(lower_bound(key)));
+			}*/
 			node_pointer upper_bound(key_type key) const
 			{
 				node_pointer temp = this->get_min(this->_root);
@@ -192,6 +198,10 @@ namespace ft {
 				}
 				return (temp);
 			};
+			/*const_node_pointer const_upper_bound(key_type key) const
+			{
+				return (to_const(upper_bound(key)));
+			}*/
 		//swap values of two tress
 			void	swap(tree& x) 
 			{
@@ -213,8 +223,9 @@ namespace ft {
 				this->_alloc = temp_alloc;
 				this->_comp = temp_comp;
 			};
+			
 		private: //All Helpers functions aka not needed outside the class
-		//Getting biggest and lowest key value
+		//Getting biggest and lowest key value		
 			node_pointer get_max(node_pointer node) const
 			{
 				while (node->right != NULL && node->right != this->_end)
