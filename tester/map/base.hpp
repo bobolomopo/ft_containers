@@ -6,17 +6,21 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 19:08:22 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/07 13:00:20 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/07 16:15:07 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define NAME ft
-//to test the true container
-#include <map>
-#include <iostream>
+# if !defined(USING_STD)
+#  define NAME ft
+# else
+#  define NAME std
+# endif /* !defined(STD) */
 
 //to test mine
 #include "../../map/map.hpp"
+#include <iostream>
+#include <map>
+#include <string>
 
 template <typename T>
 void is_equal(T map1, T map2)

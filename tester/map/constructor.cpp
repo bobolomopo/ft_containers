@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 19:07:54 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 19:21:17 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/07 16:14:56 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #define T1 int
 #define T2 int
-typedef ft::pair<const T1, T2> T3;
+typedef NAME::pair<const T1, T2> T3;
 
 int main()
 {

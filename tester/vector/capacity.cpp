@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:28:29 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 18:59:07 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/07 16:23:41 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ int main()
 	vct.swap(vct);
 	print_vec(vct2);
 	print_vec(vct);
-	vct.clear();
-	print_vec(vct);
 	std::cout << vct[3] << "   " << vct[10] << std::endl;
 	std::cout << vct[2] << "   " << vct[11] << std::endl;
 	std::cout << vct[39] << "   " << vct[0] << std::endl;
 	std::cout << vct[7] << "   " << vct[123] << std::endl;
 	std::cout << vct[1] << "   " << vct[1] << std::endl;
+	vct.clear();
+	print_vec(vct);
 	//std::cout << vct[1233] << std::endl; 	//ne renvoie pas dexception avec valeur aleatoire
 	//std::cout << vct.at(12333) << std::endl; //refuse plus exception
 }

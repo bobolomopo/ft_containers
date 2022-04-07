@@ -6,20 +6,26 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 17:26:28 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 19:02:10 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/07 16:23:10 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef BASE_HPP
+# define BASE_HPP
+
+# if !defined(USING_STD)
+#  define NAME std
+# else
+#  define NAME std
+# endif /* !defined(STD) */
+
 #include <iostream>
 
-#define NAME ft
-
-
 template<typename T>
-void print_vec(NAME::vector<T> vec)
+void print_vec(T vec)
 {
-	typename NAME::vector<T>::iterator it = vec.begin();
-	typename NAME::vector<T>::iterator ite = vec.end();
+	typename T::iterator it = vec.begin();
+	typename T::iterator ite = vec.end();
 
 	std::cout << "size : " << vec.size() << std::endl;
 	std::cout << "content :" << std::endl;
@@ -62,3 +68,4 @@ void is_equal(NAME::vector<T> vct, NAME::vector<T> vct2)
 	std::cout << "is lower or eq   : "<< (vct <= vct2) << std::endl;
 	std::cout << "################################" <<std::endl << std::endl;
 }
+#endif

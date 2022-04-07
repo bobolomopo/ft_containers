@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:51:26 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 17:27:07 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/07 15:52:00 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 //to test mine
 #include "../../vector/vector.hpp"
 #include "base.hpp"
-#define NAME ft
 #define T1 int
 #define T2 std::string
 
@@ -27,10 +26,10 @@ int main()
 
 	NAME::vector<T1> vct1;
 	print_vec(vct1);
-	NAME::vector<T1>::iterator it = vct1.begin();
 	for (int i = -34;  i < 150;i += 18)
-		vct1.insert(it++, i);
+		vct1.push_back(i);
 	print_vec(vct1);
+	std::cout << "ok" << std::endl;
 	
 	NAME::vector<T1> vct2(vct1);
 	print_vec(vct2);

@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:49:21 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 19:01:35 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/07 15:53:48 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,8 @@ int main()
 	NAME::vector<T1> vct3(19, 2);
 	NAME::vector<T1> vct4(vct3);
 
-	NAME::vector<T1>::iterator it = vct.begin();
 	for (int i = 0; i < 20 ; i++)
-		vct.insert(it++, i * 2);
+		vct.push_back(i * 2);
 	NAME::vector<T2> vct_std1;
 
 	vct_std1.insert(vct_std1.end(), 5, "NOT OK LOL");

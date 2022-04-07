@@ -6,13 +6,21 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:56:26 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/07 12:56:54 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/07 15:43:32 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define NAME ft
+#ifndef BASE_HPP
+#define BASE_HPP
+# if !defined(USING_STD)
+#  define NAME ft
+# else
+#  define NAME std
+# endif /* !defined(STD) */
+
+
 //to test the true container
-#include <map>
+#include <stack>
 #include <iostream>
 
 //to test mine
@@ -32,3 +40,5 @@ void	print_stack(T_STACK &stck, bool print_content = 1)
 	}
 	std::cout << "#################################" << std::endl;
 }
+
+#endif
