@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 19:08:22 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/07 12:51:55 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/07 13:00:20 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,18 @@
 
 //to test mine
 #include "../../map/map.hpp"
+
+template <typename T>
+void is_equal(T map1, T map2)
+{
+	std::cout << "#####   try equal ope ... ######" << std::endl;
+	std::cout << "is equal         : "<< (map1 == map2) << std::endl;
+	std::cout << "is greater       : "<< (map1 > map2) << std::endl;
+	std::cout << "is greater or eq : "<< (map1 >= map2) << std::endl;
+	std::cout << "is lower         : "<< (map1 < map2) << std::endl;
+	std::cout << "is lower or eq   : "<< (map1 <= map2) << std::endl;
+	std::cout << "################################" <<std::endl << std::endl;
+}
 
 template <typename T>
 std::string	print_pair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
@@ -42,11 +54,11 @@ void	print_map(T_MAP const &mp, bool print_content = 1)
 };
 
 template <typename T1, typename T2>
-void	printReverse(NAME::map<T1, T2> &mp)
+void	print_reverse(NAME::map<T1, T2> &mp)
 {
 	typename NAME::map<T1, T2>::reverse_iterator it = mp.rbegin(), ite = mp.rend();
 
-	std::cout << "printReverse:" << std::endl;
+	std::cout << "print_reverse:" << std::endl;
 	while (it != ite) {
 		it++;
 		std::cout << "-> " << print_pair(it, false) << std::endl;
