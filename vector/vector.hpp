@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 13:47:09 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 19:45:59 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/07 16:31:47 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,7 @@ namespace ft
 			{
 				if (this->_size + 1 > this->_capacity)
 					this->reserve(this->_size + 1);
-				this->_container[this->_size++] = value;
+				_allocator.construct(&(this->_container[this->_size++]), value);
 			};
         // Removes the last element in the vector, effectively reducing the container size by one.
             void pop_back(void)
