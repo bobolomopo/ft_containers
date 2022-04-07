@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 02:59:14 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/07 11:08:16 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/07 11:12:41 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ namespace ft {
 			tree_it(node_pointer node) : _node(node) {};
 			template<typename U>
 			tree_it(const tree_it<Node_Type, U> &copy) : _node(copy.base()) {};
-			operator tree_it<const Node_Type, T>(void) const { return tree_it<const Node_Type, T>(this->_node); }
 			tree_it &operator=(const tree_it &rhs)
 			{
 				if (this == &rhs)
