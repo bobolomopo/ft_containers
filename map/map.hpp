@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 14:27:45 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 16:11:39 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/07 11:04:45 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,9 @@ namespace ft {
 		//Returns a copy of the allocator object associated with the map
 		allocator_type get_allocator() const 					{ return allocator_type(this->_tree.get_allocator()); };
 	};
+
+	template< class Key, class T, class Compare, class Alloc >
+	void	swap(map<Key, T, Compare, Alloc> &x, map<Key, T, Compare, Alloc> &y) { x.swap(y); };
 
 	template< class Key, class T, class Compare, class Alloc >
 	bool operator==( const ft::map<Key,T,Compare,Alloc>& lhs,

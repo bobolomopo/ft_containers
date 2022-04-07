@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 03:14:59 by jandre            #+#    #+#             */
-/*   Updated: 2022/04/06 16:14:11 by jandre           ###   ########.fr       */
+/*   Updated: 2022/04/07 11:07:25 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ namespace ft {
 		Node*	left;
 		Node*	right;
 
-		Node(T new_data) : data(new_data), parent(NULL), left(NULL), right(NULL) {};
+		Node(const T &new_data = T()) : data(new_data), parent(NULL), left(NULL), right(NULL) {};
 	};
     template <class T, class Compare, class Allocator>
 	class tree
