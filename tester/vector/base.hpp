@@ -16,7 +16,7 @@
 # if !defined(USING_STD)
 #  define NAME std
 # else
-#  define NAME std
+#  define NAME ft
 # endif /* !defined(STD) */
 
 #include <iostream>
